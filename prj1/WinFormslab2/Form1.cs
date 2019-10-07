@@ -252,41 +252,5 @@ namespace WinFormslab2
                 }
             }
         }
-
-        //Localisation helper functions
-
-        private void plLangButton_Click(object sender, EventArgs e)
-        {
-            CultureInfo pl = new CultureInfo("pl-PL");
-            Assembly a = Assembly.Load("WinFormsLab2");
-            ResourceManager rm = new ResourceManager("WinFormsLab2.Lang.pl", a);
-            this.Text = rm.GetString("mainText");
-            colorButton.Text = rm.GetString("colorBtn");
-            deleteGraphButton.Text = rm.GetString("delGr");
-            deleteVertexButton.Text = rm.GetString("delVer");
-            saveButton.Text = rm.GetString("fileExp");
-            importButton.Text = rm.GetString("fileImp");
-            editBox.Text = rm.GetString("menuEdit");
-            langBox.Text = rm.GetString("menuLang");
-            saveBox.Text = rm.GetString("menuFile");
-            errorMessage = rm.GetString("errMessage");
-        }
-
-        private void engLangButton_Click(object sender, EventArgs e)
-        {
-            CultureInfo pl = new CultureInfo("en-EN");
-            Assembly a = Assembly.Load("WinFormsLab2");
-            ResourceManager rm = new ResourceManager("WinFormsLab2.Lang.en", a);
-            this.Text = rm.GetString("mainText");
-            colorButton.Text = rm.GetString("colorBtn");
-            deleteGraphButton.Text = rm.GetString("delGr");
-            deleteVertexButton.Text = rm.GetString("delVer");
-            saveButton.Text = rm.GetString("fileExp");
-            importButton.Text = rm.GetString("fileImp");
-            editBox.Text = rm.GetString("menuEdit");
-            langBox.Text = rm.GetString("menuLang");
-            saveBox.Text = rm.GetString("menuFile");
-            errorMessage = rm.GetString("errMessage");
-        }
     }
 }
