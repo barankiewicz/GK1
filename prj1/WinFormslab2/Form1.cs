@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ComputerGraphicsLab1.Class;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,20 +15,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WinFormslab2
+namespace ComputerGraphicsLab1
 {
     public partial class Form1 : Form
     {
+        InteractionMode InteractionMode;
         int r;
         float wid;
-        Graph graph;
+        Polygon polygon;
         Graphics g;
         bool isMiddleClicked;
         bool isLeft;
-        Vertex middleClicked;
+        Interface.IPolygonElement clickedElement;
+        Interface.IPolygonElement clickedElementSecond;
         Point curClick;
+        Point labelOffset;
         Stopwatch st;
         string errorMessage;
+        bool customLines;
 
         string graphLoaded = "";
         string graphLoadFailed = "";
@@ -46,36 +51,57 @@ namespace WinFormslab2
             isMiddleClicked = false;
             curClick = new Point(0,0);
             this.KeyPreview = true;
-            deleteVertexButton.Enabled = false;
-            middleClicked = null;
+            clickedElement = null;
+            clickedElementSecond = null;
             menuPanel.Width = (int)(this.Width * 0.2);
             pictureContainer.Width = (int)(this.Width * 0.8);
             Screen myScreen = Screen.FromControl(this);
             Rectangle area = myScreen.WorkingArea;
             mainWind.Width = area.Width;
             mainWind.Height = area.Height;
-            colorShower.BackColor = Color.Black;
             g = mainWind.CreateGraphics();
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.Clear(Color.White);
+            customLines = false;
+            Point labelOffset = Point.Empty;
 
-            CultureInfo pl = new CultureInfo("pl-PL");
-            Assembly a = Assembly.Load("WinFormsLab2");
-            ResourceManager rm = new ResourceManager("WinFormsLab2.Lang.pl", a);
-            this.Text = rm.GetString("mainText");
-            colorButton.Text = rm.GetString("colorBtn");
-            deleteGraphButton.Text = rm.GetString("delGr");
-            deleteVertexButton.Text = rm.GetString("delVer");
-            saveButton.Text = rm.GetString("fileExp");
-            importButton.Text = rm.GetString("fileImp");
-            editBox.Text = rm.GetString("menuEdit");
-            langBox.Text = rm.GetString("menuLang");
-            saveBox.Text = rm.GetString("menuFile");
-            errorMessage = rm.GetString("errMessage");
+            r = 5;
+            wid = 2f;
+            polygon = GeneratePolygonExample();
+            InteractionMode = InteractionMode.EDIT;
+            deleteVertexButton.Enabled = false;
+            polygon.DrawPolygon(mainWind);
+        }
 
-            r = 15;
-            wid = 3.5f;
-            graph = new Graph(r, wid);
+        private Polygon GeneratePolygonExample()
+        {
+            Polygon ret = new Polygon(r, wid);
+            var v1 = ret.AddVertex(new Point(150, 350));
+
+            var v2 = ret.AddVertex(new Point(150, 200));
+            ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
+
+            var v3 = ret.AddVertex(new Point(250, 100));
+            ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
+
+            var v4 = ret.AddVertex(new Point(400, 100));
+            ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
+
+            var v5 = ret.AddVertex(new Point(500, 200));
+            ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
+
+            var v6 = ret.AddVertex(new Point(500, 350));
+            ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
+
+            var v7 = ret.AddVertex(new Point(400, 450));
+            ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
+
+            var v8 = ret.AddVertex(new Point(250, 450));
+            ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
+
+            ret.AddEdge(ret.LastVertex, ret.FirstVertex);
+
+            return ret;
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
@@ -83,77 +109,94 @@ namespace WinFormslab2
             menuPanel.Width = (int)(this.Width * 0.2);
             pictureContainer.Width = (int)(this.Width * 0.8);
             
-            graph.DrawGraph(mainWind);
-        }
-
-        private void colorButton_Click(object sender, EventArgs e)
-        {
-            if (colorDialog1.ShowDialog() == DialogResult.OK)
-            {
-                colorShower.BackColor = colorDialog1.Color;
-
-                Vertex v = graph.GetSelected();
-                if (v != null)
-                {
-                    v.SetColor(colorDialog1.Color);
-                    graph.DrawGraph(mainWind);
-                }
-            }
+            polygon.DrawPolygon(mainWind);
         }
 
         private void mainWind_MouseDown(object sender, MouseEventArgs e)
         {
             var loc = e.Location;
-            switch (e.Button)
+            if (e.Button == MouseButtons.Left)
             {
-                case MouseButtons.Left:
-                    if (graph.ClickedOn(loc) == null)
-                    {
-                        graph.AddVertex(e.Location, colorShower.BackColor, mainWind);
-                        graph.DrawGraph(mainWind);
-                    }
-                        
-                    else
-                    {
-                        Vertex clicked = graph.ClickedOn(loc);
-                        bool fl = graph.AddEdge(clicked, graph.GetSelected(), g);
+                st.Start();
+                Interface.IPolygonElement clicked = polygon.ClickedOn(loc);
+                switch (InteractionMode)
+                {
+                    case InteractionMode.CREATE_NEW:
+                        if(polygon.VertexCount >= 2 && clicked == polygon.FirstVertex)
+                        {
+                            polygon.AddEdge(polygon.LastVertex, polygon.FirstVertex);
+                            polygon.Closed = true;
+                            InteractionMode = InteractionMode.EDIT;
+                            break;
+                        }
+                        var v = polygon.AddVertex(e.Location);
 
-                        graph.DrawGraph(mainWind);
-                    }
+                        if (polygon.VertexCount != 1)
+                        {
+                            polygon.AddEdge(polygon.BeforeLastVertex, polygon.LastVertex);
+                        }
+                            
+                        break;
+                    case InteractionMode.EDIT:
+                        if (polygon.ClickedOn(loc) == null)
+                        {
+                            clickedElement = null;
+                            polygon.SetSelected(null);
+                            polygon.DrawPolygon(mainWind);
+                            deleteVertexButton.Enabled = false;
+                        }
+                        else
+                        {
+                            clickedElement = clicked;
+                            polygon.SetSelected(clicked);
+                            polygon.DrawPolygon(mainWind);
+                            deleteVertexButton.Enabled = true;
+                        }
+                        break;
+                    case InteractionMode.MOVE:
+                        labelOffset = e.Location;
+                        break;
+                    case InteractionMode.CONSTRAINT_EQUAL:
+                        if (polygon.ClickedOn(loc) is Edge)
+                        {
+                            polygon.AddConstraint(EdgeConstraintType.CONSTRAINT_EQUAL, (Edge)clickedElement, (Edge)polygon.ClickedOn(loc));
+                            InteractionMode = InteractionMode.EDIT;
+                        } else
+                        {
+                            clickedElement = null;
+                            clickedElementSecond = null;
+                            polygon.SetSelected(null);
+                            polygon.DrawPolygon(mainWind);
+                            InteractionMode = InteractionMode.EDIT;
+                        }
+                        break;
+                    case InteractionMode.CONSTRAINT_PARALLEL:
+                        if (clicked is Edge)
+                        {
+                            polygon.AddConstraint(EdgeConstraintType.CONSTRAINT_PARALLEL, (Edge)clickedElement, (Edge)clicked);
+                            InteractionMode = InteractionMode.EDIT;
+                        } else
+                        {
+                            clickedElement = null;
+                            clickedElementSecond = null;
+                            polygon.SetSelected(null);
+                            polygon.DrawPolygon(mainWind);
+                            InteractionMode = InteractionMode.EDIT;
+                        }
+                        break;
+                }
 
-                    break;
-                case MouseButtons.Right:
-                    var v = graph.ClickedOn(loc);
-
-                    if (v != null)
-                    {
-                        deleteVertexButton.Enabled = true;
-                        graph.SetSelected(v);
-                    }
-                    else
-                    {
-                        deleteVertexButton.Enabled = false;
-                        graph.SetSelected(null);
-                    }
-
-                    graph.DrawGraph(mainWind);
-                    break;
-                case MouseButtons.Middle:
-                    Vertex ver = graph.GetSelected();
-                    if (ver != null)
-                    {
-                        curClick = loc;
-                        middleClicked = ver;
-                        isMiddleClicked = true;
-                        st.Start();
-                    }
-                    break;
             }
+            else if (e.Button == MouseButtons.Right)
+            {
+                //Moze cos do wpisania?
+            }
+            polygon.DrawPolygon(mainWind);
         }
 
         private void mainWind_MouseUp(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Middle && middleClicked != null)
+            if(e.Button == MouseButtons.Left && polygon.GetSelected() != null)
             {
                 isMiddleClicked = false;
                 curClick = new Point(0, 0);
@@ -163,7 +206,7 @@ namespace WinFormslab2
                 int picY = mainWind.Height;
                 int contY = this.Height;
                 
-                var toSet = new Point(middleClicked.location.X, middleClicked.location.Y);
+                var toSet = new Point(polygon.GetSelected().GetLocation().X, polygon.GetSelected().GetLocation().Y);
                 if (toSet.X < 0)
                     toSet.X = 0;
                 else if (toSet.X > contX)
@@ -174,21 +217,16 @@ namespace WinFormslab2
                 else if (toSet.Y > contY)
                     toSet.Y = contY - 6*r;
 
-                middleClicked.location = toSet;
-                graph.DrawGraph(mainWind);
+                //middleClicked.Location = toSet;
+                polygon.DrawPolygon(mainWind);
                 st.Reset();
             }
-        }
-
-        private void deleteGraphButton_Click(object sender, EventArgs e)
-        {
-            graph = new Graph(r, wid);
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                Graph.WriteToFile(graph, saveFileDialog.FileName);
+                Polygon.WriteToFile(polygon, saveFileDialog.FileName);
         }
 
         private void importButton_Click(object sender, EventArgs e)
@@ -197,7 +235,7 @@ namespace WinFormslab2
             {
                 try
                 {
-                    graph = Graph.ReadFromFile(openFileDialog.FileName);
+                    polygon = Polygon.ReadFromFile(openFileDialog.FileName);
                 }
                 catch (SerializationException)
                 {
@@ -205,51 +243,180 @@ namespace WinFormslab2
                 }
             }
 
-            graph.DrawGraph(mainWind);
-        }
-
-        private void deleteVertexButton_Click(object sender, EventArgs e)
-        {
-            if (graph.GetSelected() != null)
-            {
-                graph.DeleteVertex(graph.GetSelected());
-                graph.SetSelected(null);
-                deleteVertexButton.Enabled = false;
-
-                graph.DrawGraph(mainWind);
-            }
+            polygon.DrawPolygon(mainWind);
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete && graph.GetSelected() != null)
+            if (e.KeyCode == Keys.Delete && polygon.GetSelected() is Vertex)
             {
-                graph.DeleteVertex(graph.GetSelected());
-                graph.SetSelected(null);
+                polygon.DeleteElement(polygon.GetSelected());
+                polygon.SetSelected(null);
                 deleteVertexButton.Enabled = false;
 
-                graph.DrawGraph(mainWind);
+                polygon.DrawPolygon(mainWind);
+            } else if (e.KeyCode == Keys.Delete && polygon.GetSelected() is EdgeConstraint)
+            {
+                polygon.DeleteElement(polygon.GetSelected());
+                polygon.SetSelected(null);
+
+                polygon.DrawPolygon(mainWind);
             }
         }
 
         private void mainWind_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle)
+            if (e.Button == MouseButtons.Left && InteractionMode == InteractionMode.EDIT && polygon.GetSelected() != null)
             {
-                if (middleClicked == null)
-                    return;
-                if(st.ElapsedMilliseconds >= 10)
+                if (st.ElapsedMilliseconds >= 10)
                 {
-                    Point offset = new Point(e.Location.X - curClick.X, e.Location.Y - curClick.Y);
-                    Point p = middleClicked.location;
+                    Point offset = new Point(e.Location.X - polygon.GetSelected().GetLocation().X, e.Location.Y 
+                        - polygon.GetSelected().GetLocation().Y);
+                    Point p = polygon.GetSelected().GetLocation();
                     p.Offset(offset);
 
-                    middleClicked.location = p;
+                    //polygon.GetSelected().Offset(offset);
+                    polygon.OffsetElement(polygon.GetSelected(), offset, new List<Edge>(), new List<EdgeConstraint>());
+                    //((Vertex)(middleClicked)).Location = p;
                     curClick = e.Location;
 
-                    graph.DrawGraph(mainWind);
+                    polygon.DrawPolygon(mainWind);
                     st.Restart();
                 }
+            } else if (e.Button == MouseButtons.None && InteractionMode == InteractionMode.CREATE_NEW)
+            {
+                if (st.ElapsedMilliseconds >= 10)
+                {
+                    polygon.DrawPolygon(mainWind, e.Location);
+                    st.Restart();
+                }
+            } else if (e.Button == MouseButtons.Left && InteractionMode == InteractionMode.MOVE)
+            {
+                if (st.ElapsedMilliseconds >= 10)
+                {
+                    Point offset = new Point(e.X - labelOffset.X, e.Y - labelOffset.Y);
+                    labelOffset = e.Location;
+                    polygon.Offset(offset);
+                    polygon.DrawPolygon(mainWind);
+                    st.Restart();
+                }
+            }
+
+        }
+        
+        private void moveButton_Click(object sender, EventArgs e)
+        {
+            InteractionMode = InteractionMode.MOVE;
+            Cursor.Current = Cursors.Hand;
+        }
+
+        private void newPolygonButton_Click(object sender, EventArgs e)
+        {
+            polygon = new Polygon(r, wid);
+            InteractionMode = InteractionMode.CREATE_NEW;
+            Cursor.Current = Cursors.Cross;
+            polygon.DrawPolygon(mainWind);
+        }
+
+        private void editPolygonButton_Click(object sender, EventArgs e)
+        {
+            InteractionMode = InteractionMode.EDIT;
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void mainWind_Paint(object sender, PaintEventArgs e)
+        {
+            
+        }
+
+        private void customLinesButton_Click(object sender, EventArgs e)
+        {
+            if (customLines)
+            {
+                customLines = false;
+                polygon.CustomLines = false;
+                ((Button)sender).Text = "Draw Custom Lines (Bresenham Algorithm)";
+            }
+            else
+            {
+                customLines = true;
+                polygon.CustomLines = true;
+                ((Button)sender).Text = "Draw WinForms Lines";
+            }
+
+            polygon.DrawPolygon(mainWind);
+        }
+
+        private void mainWind_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var loc = e.Location;
+            Interface.IPolygonElement clicked = polygon.ClickedOn(loc);
+            if(InteractionMode == InteractionMode.EDIT && clicked is Edge)
+            {
+                Edge cl = (Edge)clicked;
+                Point newVertexLocation = cl.GetLocation();
+
+                Vertex from = cl.from;
+                Vertex to = cl.to;
+
+                polygon.DeleteEdge((Edge)clicked);
+
+                polygon.AddVertex(newVertexLocation);
+                polygon.AddEdge(from, polygon.LastVertex);
+                polygon.AddEdge(polygon.LastVertex, to);
+            }
+        }
+
+        private void deleteVertexButton_Click(object sender, EventArgs e)
+        {
+            if (polygon.GetSelected() is Vertex)
+            {
+                polygon.DeleteElement(polygon.GetSelected());
+                polygon.SetSelected(null);
+                deleteVertexButton.Enabled = false;
+
+                polygon.DrawPolygon(mainWind);
+            }
+        }
+
+        private void equalContraintButton_Click(object sender, EventArgs e)
+        {
+            if (polygon.GetSelected() is Edge)
+            {
+                InteractionMode = InteractionMode.CONSTRAINT_EQUAL;
+                //polygon.SetSelected(null);
+                clickedElement = polygon.GetSelected();
+
+            } else
+            {
+                MessageBox.Show("First select an edge, then click the constraint button, then select the 2nd edge!");
+            }
+        }
+
+        private void parallelConstraintButton_Click(object sender, EventArgs e)
+        {
+            if (polygon.GetSelected() is Edge)
+            {
+                InteractionMode = InteractionMode.CONSTRAINT_PARALLEL;
+                //polygon.SetSelected(null);
+                clickedElement = polygon.GetSelected();
+            }
+            else
+            {
+                MessageBox.Show("First select an edge, then click the constraint button, then select the 2nd edge!");
+            }
+        }
+
+        private void removeConstraintButton_Click(object sender, EventArgs e)
+        {
+            if (polygon.GetSelected() is Edge)
+            {
+                //polygon.SetSelected(null);
+                clickedElement = polygon.GetSelected();
+            }
+            else
+            {
+                MessageBox.Show("First select an edge, then click the button!");
             }
         }
     }

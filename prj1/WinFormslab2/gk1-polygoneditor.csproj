@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{29FB93BF-1754-4888-8C22-88AB3EF43DAC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WinFormslab2</RootNamespace>
-    <AssemblyName>WinFormslab2</AssemblyName>
+    <RootNamespace>ComputerGraphicsLab1</RootNamespace>
+    <AssemblyName>ComputerGraphicsLab1</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,6 +39,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,35 +53,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\EdgeConstraint.cs" />
+    <Compile Include="Class\LineDrawer.cs" />
+    <Compile Include="Enum\EdgeConstraintType.cs" />
+    <Compile Include="Enum\InteractionMode.cs" />
+    <Compile Include="Class\Edge.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Graph.cs" />
-    <Compile Include="Lang\pl.Designer.cs">
-      <DependentUpon>pl.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Lang\en.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>en.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="Interface\IPolygonElement.cs" />
+    <Compile Include="Class\Polygon.cs" />
+    <Compile Include="Class\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <Compile Include="Class\Vertex.cs" />
+    <EmbeddedResource Include="Form1.en.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Lang\pl.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>pl.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Lang\en.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>en.Designer.cs</LastGenOutput>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -90,6 +85,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -106,5 +102,6 @@
   <ItemGroup>
     <None Include="Resources\GraphEditor.resources.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
