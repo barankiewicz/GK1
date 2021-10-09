@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 namespace ComputerGraphicsLab1
 {
     [Serializable]
-    class Vertex : Interface.IPolygonElement
+    public class Vertex : Interface.IFigureElement
     {
         private Color color;
         private Point locc;
@@ -32,7 +32,7 @@ namespace ComputerGraphicsLab1
             wid = 3.5f;
         }
 
-        public void Draw(Graphics g, bool selected, bool customLines = false)
+        public void Draw(Graphics g, bool selected, bool customLines = false, bool isBeingCreated = false)
         {
             Point loc = Point.Empty;
             int rad = customLines ? 2 : Radius;

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace ComputerGraphicsLab1.Interface
 {
-    public interface IPolygonElement
+    public interface IFigureElement
     {
-        void Draw(Graphics g, bool selected, bool customLines = false);
         Point GetLocation();
         bool IsClicked(Point p);
         void Offset(Point p);

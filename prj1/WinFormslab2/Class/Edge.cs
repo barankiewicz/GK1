@@ -6,7 +6,7 @@ using System.Drawing.Drawing2D;
 namespace ComputerGraphicsLab1
 {
     [Serializable]
-    class Edge : Interface.IPolygonElement
+    public class Edge : Interface.IFigureElement
     {
         private Vertex v1, v2;
 
@@ -16,18 +16,21 @@ namespace ComputerGraphicsLab1
         public Vertex Rightmost { get { return (v2.Location.X >= v1.Location.X) ? v2 : v1; } }
         public Vertex Leftmost { get { return (v2.Location.X < v1.Location.X) ? v2 : v1; } }
 
-        public Edge(ref Vertex _from, ref Vertex _to)
+        public Color EdgeColor { get; set; }
+
+        public Edge(ref Vertex _from, ref Vertex _to, Color col)
         {
             v1 = _from;
             v2 = _to;
+            EdgeColor = col;
         }
 
-        public void Draw(Graphics g, bool selected, bool customLines = false)
+        public void Draw(Graphics g, bool selected, bool customLines = false, bool isBeingCreated = false, bool antialiasing = false)
         {
             if (customLines)
-                LineDrawer.DrawCustomLine(from.GetLocation(), to.GetLocation(), selected ? Color.DarkOrange : Color.Black, g);
+                LineDrawer.DrawCustomLine(from.GetLocation(), to.GetLocation(), selected ? Color.DarkOrange : EdgeColor, g, antialiasing);
             else
-                g.DrawLine(new Pen(selected ? Color.DarkOrange : Color.Black, 3.5f), from.GetLocation(), to.GetLocation());
+                g.DrawLine(new Pen(selected ? Color.DarkOrange : EdgeColor, 3.5f), from.GetLocation(), to.GetLocation());
         }
 
         public Point GetLocation()

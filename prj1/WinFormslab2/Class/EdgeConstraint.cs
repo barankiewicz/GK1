@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace ComputerGraphicsLab1.Class
 {
-    class EdgeConstraint : Interface.IPolygonElement
+    [Serializable]
+    class EdgeConstraint : Interface.IFigureElement
     {
         private Edge edge1;
         private Edge edge2;
@@ -23,7 +24,7 @@ namespace ComputerGraphicsLab1.Class
             id = id_;
         }
 
-        public void Draw(Graphics g, bool selected, bool customLines = false)
+        public void Draw(Graphics g, bool selected, bool customLines = false, bool isBeingCreated = false)
         {
             Point loc1 = edge1.GetLocation();
             Point loc2 = edge2.GetLocation();

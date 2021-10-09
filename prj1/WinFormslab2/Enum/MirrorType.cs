@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace ComputerGraphicsLab1
 {
-    public enum InteractionMode
+    public enum MirrorType
     {
-        CREATE_NEW,
-        EDIT,
-        MOVE
+        VERTICAL,
+        HORIZONTAL,
+        VERTICAL_HORIZONTAL,
+        POINT,
+        UNDEFINED
     }
 }

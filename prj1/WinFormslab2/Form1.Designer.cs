@@ -32,13 +32,17 @@
             this.menuPanel = new System.Windows.Forms.TableLayoutPanel();
             this.editBox = new System.Windows.Forms.GroupBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.newMirroredPolygonPoint_btn = new System.Windows.Forms.Button();
+            this.newMirroredPolygonHorVer_btn = new System.Windows.Forms.Button();
+            this.newMirroredPolygonVer_btn = new System.Windows.Forms.Button();
+            this.newMirroredPolygon_btn = new System.Windows.Forms.Button();
+            this.deleteFigureButton = new System.Windows.Forms.Button();
+            this.newCircleButton = new System.Windows.Forms.Button();
             this.customLinesButton = new System.Windows.Forms.Button();
             this.moveButton = new System.Windows.Forms.Button();
-            this.equalContraintButton = new System.Windows.Forms.Button();
             this.deleteVertexButton = new System.Windows.Forms.Button();
             this.editPolygonButton = new System.Windows.Forms.Button();
             this.newPolygonButton = new System.Windows.Forms.Button();
-            this.parallelConstraintButton = new System.Windows.Forms.Button();
             this.saveBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.importButton = new System.Windows.Forms.Button();
@@ -48,7 +52,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.removeConstraintButton = new System.Windows.Forms.Button();
+            this.antialiasing = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.mainWind)).BeginInit();
             this.menuPanel.SuspendLayout();
             this.editBox.SuspendLayout();
@@ -87,7 +91,7 @@
             this.menuPanel.Name = "menuPanel";
             this.menuPanel.RowCount = 3;
             this.menuPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.menuPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.menuPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.menuPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.menuPanel.Size = new System.Drawing.Size(200, 562);
             this.menuPanel.TabIndex = 2;
@@ -98,7 +102,7 @@
             this.editBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.editBox.Location = new System.Drawing.Point(3, 3);
             this.editBox.Name = "editBox";
-            this.editBox.Size = new System.Drawing.Size(194, 316);
+            this.editBox.Size = new System.Drawing.Size(194, 428);
             this.editBox.TabIndex = 0;
             this.editBox.TabStop = false;
             this.editBox.Text = "Menu";
@@ -108,24 +112,100 @@
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.Controls.Add(this.removeConstraintButton);
+            this.panel2.Controls.Add(this.antialiasing);
+            this.panel2.Controls.Add(this.newMirroredPolygonPoint_btn);
+            this.panel2.Controls.Add(this.newMirroredPolygonHorVer_btn);
+            this.panel2.Controls.Add(this.newMirroredPolygonVer_btn);
+            this.panel2.Controls.Add(this.newMirroredPolygon_btn);
+            this.panel2.Controls.Add(this.deleteFigureButton);
+            this.panel2.Controls.Add(this.newCircleButton);
             this.panel2.Controls.Add(this.customLinesButton);
             this.panel2.Controls.Add(this.moveButton);
-            this.panel2.Controls.Add(this.equalContraintButton);
             this.panel2.Controls.Add(this.deleteVertexButton);
             this.panel2.Controls.Add(this.editPolygonButton);
             this.panel2.Controls.Add(this.newPolygonButton);
-            this.panel2.Controls.Add(this.parallelConstraintButton);
             this.panel2.Location = new System.Drawing.Point(-3, 19);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(200, 297);
+            this.panel2.Size = new System.Drawing.Size(200, 409);
             this.panel2.TabIndex = 4;
+            // 
+            // newMirroredPolygonPoint_btn
+            // 
+            this.newMirroredPolygonPoint_btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newMirroredPolygonPoint_btn.Location = new System.Drawing.Point(1, 157);
+            this.newMirroredPolygonPoint_btn.Name = "newMirroredPolygonPoint_btn";
+            this.newMirroredPolygonPoint_btn.Size = new System.Drawing.Size(199, 34);
+            this.newMirroredPolygonPoint_btn.TabIndex = 14;
+            this.newMirroredPolygonPoint_btn.Text = "New Mirrored Polygon (Point)";
+            this.newMirroredPolygonPoint_btn.UseVisualStyleBackColor = true;
+            this.newMirroredPolygonPoint_btn.Click += new System.EventHandler(this.newMirroredPolygonPoint_btn_Click);
+            // 
+            // newMirroredPolygonHorVer_btn
+            // 
+            this.newMirroredPolygonHorVer_btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newMirroredPolygonHorVer_btn.Location = new System.Drawing.Point(-2, 125);
+            this.newMirroredPolygonHorVer_btn.Name = "newMirroredPolygonHorVer_btn";
+            this.newMirroredPolygonHorVer_btn.Size = new System.Drawing.Size(199, 34);
+            this.newMirroredPolygonHorVer_btn.TabIndex = 13;
+            this.newMirroredPolygonHorVer_btn.Text = "New Mirrored Polygon (Hor. and Ver.)";
+            this.newMirroredPolygonHorVer_btn.UseVisualStyleBackColor = true;
+            this.newMirroredPolygonHorVer_btn.Click += new System.EventHandler(this.newMirroredPolygonHorVer_btn_Click);
+            // 
+            // newMirroredPolygonVer_btn
+            // 
+            this.newMirroredPolygonVer_btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newMirroredPolygonVer_btn.Location = new System.Drawing.Point(1, 94);
+            this.newMirroredPolygonVer_btn.Name = "newMirroredPolygonVer_btn";
+            this.newMirroredPolygonVer_btn.Size = new System.Drawing.Size(199, 34);
+            this.newMirroredPolygonVer_btn.TabIndex = 12;
+            this.newMirroredPolygonVer_btn.Text = "New Mirrored Polygon (Vertical)";
+            this.newMirroredPolygonVer_btn.UseVisualStyleBackColor = true;
+            this.newMirroredPolygonVer_btn.Click += new System.EventHandler(this.newMirroredPolygonVer_btn_Click);
+            // 
+            // newMirroredPolygon_btn
+            // 
+            this.newMirroredPolygon_btn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newMirroredPolygon_btn.Location = new System.Drawing.Point(1, 61);
+            this.newMirroredPolygon_btn.Name = "newMirroredPolygon_btn";
+            this.newMirroredPolygon_btn.Size = new System.Drawing.Size(199, 34);
+            this.newMirroredPolygon_btn.TabIndex = 11;
+            this.newMirroredPolygon_btn.Text = "New Mirrored Polygon (Horizontal)";
+            this.newMirroredPolygon_btn.UseVisualStyleBackColor = true;
+            this.newMirroredPolygon_btn.Click += new System.EventHandler(this.newMirroredPolygon_btn_Click);
+            // 
+            // deleteFigureButton
+            // 
+            this.deleteFigureButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteFigureButton.Location = new System.Drawing.Point(0, 296);
+            this.deleteFigureButton.Name = "deleteFigureButton";
+            this.deleteFigureButton.Size = new System.Drawing.Size(202, 34);
+            this.deleteFigureButton.TabIndex = 10;
+            this.deleteFigureButton.Text = "Delete Figure";
+            this.deleteFigureButton.UseVisualStyleBackColor = true;
+            this.deleteFigureButton.Click += new System.EventHandler(this.deleteFigureButton_Click);
+            // 
+            // newCircleButton
+            // 
+            this.newCircleButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newCircleButton.Location = new System.Drawing.Point(1, 31);
+            this.newCircleButton.Name = "newCircleButton";
+            this.newCircleButton.Size = new System.Drawing.Size(199, 34);
+            this.newCircleButton.TabIndex = 9;
+            this.newCircleButton.Text = "New Circle";
+            this.newCircleButton.UseVisualStyleBackColor = true;
+            this.newCircleButton.Click += new System.EventHandler(this.newCircleButton_Click);
             // 
             // customLinesButton
             // 
             this.customLinesButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.customLinesButton.Location = new System.Drawing.Point(-2, 263);
+            this.customLinesButton.Location = new System.Drawing.Point(3, 375);
             this.customLinesButton.Name = "customLinesButton";
             this.customLinesButton.Size = new System.Drawing.Size(199, 34);
             this.customLinesButton.TabIndex = 7;
@@ -137,7 +217,7 @@
             // 
             this.moveButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.moveButton.Location = new System.Drawing.Point(0, 60);
+            this.moveButton.Location = new System.Drawing.Point(0, 227);
             this.moveButton.Name = "moveButton";
             this.moveButton.Size = new System.Drawing.Size(199, 34);
             this.moveButton.TabIndex = 6;
@@ -145,23 +225,11 @@
             this.moveButton.UseVisualStyleBackColor = true;
             this.moveButton.Click += new System.EventHandler(this.moveButton_Click);
             // 
-            // equalContraintButton
-            // 
-            this.equalContraintButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.equalContraintButton.Location = new System.Drawing.Point(1, 122);
-            this.equalContraintButton.Name = "equalContraintButton";
-            this.equalContraintButton.Size = new System.Drawing.Size(199, 34);
-            this.equalContraintButton.TabIndex = 3;
-            this.equalContraintButton.Text = "Edge Contraint: Equal";
-            this.equalContraintButton.UseVisualStyleBackColor = true;
-            this.equalContraintButton.Click += new System.EventHandler(this.equalContraintButton_Click);
-            // 
             // deleteVertexButton
             // 
             this.deleteVertexButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteVertexButton.Location = new System.Drawing.Point(-2, 91);
+            this.deleteVertexButton.Location = new System.Drawing.Point(1, 267);
             this.deleteVertexButton.Name = "deleteVertexButton";
             this.deleteVertexButton.Size = new System.Drawing.Size(202, 34);
             this.deleteVertexButton.TabIndex = 2;
@@ -173,7 +241,7 @@
             // 
             this.editPolygonButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.editPolygonButton.Location = new System.Drawing.Point(0, 31);
+            this.editPolygonButton.Location = new System.Drawing.Point(0, 197);
             this.editPolygonButton.Name = "editPolygonButton";
             this.editPolygonButton.Size = new System.Drawing.Size(199, 34);
             this.editPolygonButton.TabIndex = 1;
@@ -192,18 +260,6 @@
             this.newPolygonButton.Text = "New Polygon";
             this.newPolygonButton.UseVisualStyleBackColor = true;
             this.newPolygonButton.Click += new System.EventHandler(this.newPolygonButton_Click);
-            // 
-            // parallelConstraintButton
-            // 
-            this.parallelConstraintButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.parallelConstraintButton.Location = new System.Drawing.Point(1, 153);
-            this.parallelConstraintButton.Name = "parallelConstraintButton";
-            this.parallelConstraintButton.Size = new System.Drawing.Size(199, 34);
-            this.parallelConstraintButton.TabIndex = 4;
-            this.parallelConstraintButton.Text = "Edge Constraint: Parallel";
-            this.parallelConstraintButton.UseVisualStyleBackColor = true;
-            this.parallelConstraintButton.Click += new System.EventHandler(this.parallelConstraintButton_Click);
             // 
             // saveBox
             // 
@@ -275,24 +331,23 @@
             // 
             // saveFileDialog
             // 
-            this.saveFileDialog.Filter = "Graph file | *.graph";
+            this.saveFileDialog.Filter = "Canvas file | *.canvas";
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "SavedGraph";
-            this.openFileDialog.Filter = "Graph file | *.graph";
+            this.openFileDialog.FileName = "SavedCanvas";
+            this.openFileDialog.Filter = "Canvas file | *.canvas";
             // 
-            // removeConstraintButton
+            // antialiasing
             // 
-            this.removeConstraintButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.removeConstraintButton.Location = new System.Drawing.Point(1, 184);
-            this.removeConstraintButton.Name = "removeConstraintButton";
-            this.removeConstraintButton.Size = new System.Drawing.Size(199, 34);
-            this.removeConstraintButton.TabIndex = 8;
-            this.removeConstraintButton.Text = "Remove Constraint";
-            this.removeConstraintButton.UseVisualStyleBackColor = true;
-            this.removeConstraintButton.Click += new System.EventHandler(this.removeConstraintButton_Click);
+            this.antialiasing.AutoSize = true;
+            this.antialiasing.Location = new System.Drawing.Point(3, 357);
+            this.antialiasing.Name = "antialiasing";
+            this.antialiasing.Size = new System.Drawing.Size(79, 17);
+            this.antialiasing.TabIndex = 15;
+            this.antialiasing.Text = "Antialiasing";
+            this.antialiasing.UseVisualStyleBackColor = true;
+            this.antialiasing.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // Form1
             // 
@@ -313,6 +368,7 @@
             this.menuPanel.ResumeLayout(false);
             this.editBox.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.saveBox.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -335,14 +391,18 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button equalContraintButton;
         private System.Windows.Forms.Button deleteVertexButton;
         private System.Windows.Forms.Button editPolygonButton;
         private System.Windows.Forms.Button newPolygonButton;
-        private System.Windows.Forms.Button parallelConstraintButton;
         private System.Windows.Forms.Button moveButton;
         private System.Windows.Forms.Button customLinesButton;
-        private System.Windows.Forms.Button removeConstraintButton;
+        private System.Windows.Forms.Button newCircleButton;
+        private System.Windows.Forms.Button deleteFigureButton;
+        private System.Windows.Forms.Button newMirroredPolygon_btn;
+        private System.Windows.Forms.Button newMirroredPolygonPoint_btn;
+        private System.Windows.Forms.Button newMirroredPolygonHorVer_btn;
+        private System.Windows.Forms.Button newMirroredPolygonVer_btn;
+        private System.Windows.Forms.CheckBox antialiasing;
     }
 }
 

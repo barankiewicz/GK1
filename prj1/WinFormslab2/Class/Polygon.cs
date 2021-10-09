@@ -9,23 +9,21 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Drawing.Drawing2D;
 using ComputerGraphicsLab1.Class;
+using ComputerGraphicsLab1.Interface;
 
 namespace ComputerGraphicsLab1
 {
 
     [Serializable]
-    class Polygon
+    public class Polygon : IFigure
     {
-        private List<Vertex> vertices;
-        private List<Edge> edges;
-        private List<EdgeConstraint> constraints;
-        private int r;
-        private float wid;
-        private Interface.IPolygonElement selected;
-        private bool closed;
-        private bool customLines;
+        public List<Vertex> vertices;
+        public List<Edge> edges;
+        protected int r;
+        protected float wid;
+        protected Interface.IFigureElement selected;
+        protected bool closed;
 
-        public bool CustomLines { get => customLines; set => customLines = value; }
         public bool Closed { get => closed; set => closed = value; }
         public int VertexCount { get => vertices.Count; }
         public int EdgesCount { get => edges.Count; }
@@ -33,25 +31,20 @@ namespace ComputerGraphicsLab1
         public Vertex FirstVertex { get => vertices.FirstOrDefault(); }
         public Vertex LastVertex { get => vertices.LastOrDefault(); }
         public Vertex BeforeLastVertex { get => vertices.ElementAtOrDefault(vertices.Count - 2); }
+        public Color FigureColor { get; set; }
 
-        public Polygon(int _r, float _wid, bool customLines_ = false)
+        public Polygon(int _r, float _wid, Color col)
         {
             vertices = new List<Vertex>();
             edges = new List<Edge>();
-            constraints = new List<EdgeConstraint>();
             r = _r;
             wid = _wid;
             selected = null;
-            customLines = customLines_;
+            FigureColor = col;
         }
 
-        public Interface.IPolygonElement ClickedOn(Point click)
+        public IFigureElement ClickedOn(Point click)
         {
-            foreach (EdgeConstraint c in constraints)
-            {
-                if (c.IsClicked(click))
-                    return c;
-            }
 
             foreach (Vertex v in vertices)
             {
@@ -68,34 +61,14 @@ namespace ComputerGraphicsLab1
             return null;
         }
 
-        public void SetSelected(Interface.IPolygonElement v)
+        public void SetSelected(Interface.IFigureElement v)
         {
             selected = v;
         }
 
-        public Interface.IPolygonElement GetSelected()
+        public Interface.IFigureElement GetSelected()
         {
             return selected;
-        }
-
-        public void AddConstraint(EdgeConstraintType type, Edge e1, Edge e2)
-        {
-            if (type == EdgeConstraintType.CONSTRAINT_PARALLEL && e1.IsNeighbour(e2))
-            {
-                MessageBox.Show("Can't add the Parallel Constraint between neighbouring edges!");
-                return;
-            }
-
-            var c1 = FindConstraint(e1);
-            var c2 = FindConstraint(e2);
-
-            if(c1 != null || c2 != null)
-            {
-                MessageBox.Show("There's already a relation on one of the edges!");
-                return;
-            }
-            constraints.Add(new EdgeConstraint(type, e1, e2, constraints.Count + 1));
-            constraints.Last().Offset(new Point(0, 0), e1, false);
         }
 
         public Vertex AddVertex(Point loc)
@@ -111,6 +84,7 @@ namespace ComputerGraphicsLab1
 
         public void DeleteVertex(Vertex v)
         {
+            if (VertexCount <= 3 || !vertices.Contains(v)) return;
             List<Edge> temp = new List<Edge>();
             Vertex before = null;
             Vertex after = null;
@@ -139,83 +113,45 @@ namespace ComputerGraphicsLab1
 
         public void DeleteEdge(Edge e)
         {
-            var c = FindConstraint(e);
-            if(c != null)
-                constraints.Remove(FindConstraint(e));
             edges.Remove(e);
         }
 
-        public EdgeConstraint FindConstraint(Edge e)
-        {
-            foreach(EdgeConstraint c in constraints)
-            {
-                if (c.ContainsEdge(e))
-                    return c;
-            }
-            return null;
-        }
-
-        public void DeleteElement(Interface.IPolygonElement element)
+        public void DeleteElement(Interface.IFigureElement element)
         {
             if (element is Edge)
                 DeleteEdge((Edge)element);
             else if (element is Vertex)
                 DeleteVertex((Vertex)element);
-            else
-                DeleteteConstraint((EdgeConstraint)element);
         }
 
-        private void DeleteteConstraint(EdgeConstraint element)
+        public void Draw(Graphics g, Point? cursor=null, bool customLines = false, bool isBeingCreated = false, bool antialiasing = false)
         {
-            constraints.Remove(element);
-        }
-
-        public void DrawPolygon(PictureBox p, Point? cursor=null)
-        {
-            Bitmap bmp = new Bitmap(p.Width, p.Width);
-            Graphics g = Graphics.FromImage(bmp);
-            //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            if (vertices.Count == 0) return;
 
             if (cursor != null && !customLines)
                 g.DrawLine(new Pen(Color.Red, 3.5f), LastVertex.GetLocation(), (Point)cursor);
             else if (cursor != null && customLines)
-                LineDrawer.DrawCustomLine(LastVertex.GetLocation(), (Point)cursor, Color.Red, g);
+                LineDrawer.DrawCustomLine(LastVertex.GetLocation(), (Point)cursor, Color.Red, g, antialiasing);
 
             for (int i = 0; i < edges.Count; i++)
             {
                 if (selected != null && edges[i] == selected) //If selected, we want to draw it differently
                 {
-                    edges[i].Draw(g, true, CustomLines);
+                    edges[i].Draw(g, true, customLines, false, antialiasing);
                     continue;
                 }
-                edges[i].Draw(g, false, CustomLines);
+                edges[i].Draw(g, false, customLines, false, antialiasing);
             }
 
             for (int i = 0; i < vertices.Count; i++)
             {
                 if (selected != null && vertices[i] == selected) //If selected, we want to draw it differently
                 {
-                    vertices[i].Draw(g, true, CustomLines);
+                    vertices[i].Draw(g, true, customLines);
                     continue;
                 }
-                vertices[i].Draw(g, false, CustomLines);
+                vertices[i].Draw(g, false, customLines);
             }
-
-            for (int i = 0; i < constraints.Count; i++)
-            {
-                if (selected != null && constraints[i] == selected) //If selected, we want to draw it differently
-                {
-                    constraints[i].Draw(g, true, false);
-                    continue;
-                }
-                constraints[i].Draw(g, false, false);
-            }
-
-            if (p.Image != null)
-                p.Image.Dispose();
-
-            g.Dispose(); 
-            p.Image = (Image)bmp;
         }
 
         public bool ExistEdge(Vertex v1, Vertex v2)
@@ -239,7 +175,7 @@ namespace ComputerGraphicsLab1
             //        return false;
             //    }    
             //}
-            edges.Add(new Edge(ref v1, ref v2));
+            edges.Add(new Edge(ref v1, ref v2, FigureColor));
             return true;
         }
 
@@ -267,7 +203,7 @@ namespace ComputerGraphicsLab1
             return null;
         }
 
-        public void OffsetElement(Interface.IPolygonElement e, Point p, List<Edge> touchedEdges, List<EdgeConstraint> touchedConstraits)
+        public void OffsetElement(Interface.IFigureElement e, Point p, List<Edge> touchedEdges)
         {
             if (touchedEdges.Count == edges.Count)
                 return;
@@ -297,22 +233,39 @@ namespace ComputerGraphicsLab1
             if(!touchedEdges.Contains(initiallyMoved1)) touchedEdges.Add(initiallyMoved1);
             if(!touchedEdges.Contains(initiallyMoved2)) touchedEdges.Add(initiallyMoved2);
 
-            EdgeConstraint constraint1 = FindConstraint(initiallyMoved1);
-            EdgeConstraint constraint2 = FindConstraint(initiallyMoved2);
+            //EdgeConstraint constraint1 = FindConstraint(initiallyMoved1);
+            //EdgeConstraint constraint2 = FindConstraint(initiallyMoved2);
 
-            if(constraint1 != null && !touchedConstraits.Contains(constraint1))
-            {
-                touchedConstraits.Add(constraint1);
-                constraint1.Offset(p, initiallyMoved1, rightmost1);
-                OffsetElement(initiallyMoved1, p, touchedEdges, touchedConstraits);
-            }
+            //if(constraint1 != null && !touchedConstraits.Contains(constraint1))
+            //{
+            //    touchedConstraits.Add(constraint1);
+            //    constraint1.Offset(p, initiallyMoved1, rightmost1);
+            //    OffsetElement(initiallyMoved1, p, touchedEdges, touchedConstraits);
+            //}
 
-            if (constraint2 != null && !touchedConstraits.Contains(constraint2))
-            {
-                touchedConstraits.Add(constraint2);
-                constraint2.Offset(p, initiallyMoved2, rightmost2);
-                OffsetElement(initiallyMoved2, p, touchedEdges, touchedConstraits);
-            }
+            //if (constraint2 != null && !touchedConstraits.Contains(constraint2))
+            //{
+            //    touchedConstraits.Add(constraint2);
+            //    constraint2.Offset(p, initiallyMoved2, rightmost2);
+            //    OffsetElement(initiallyMoved2, p, touchedEdges, touchedConstraits);
+            //}
+        }
+
+
+        public Point SplitEdge(Edge cl, Point newVertexLocation)
+        {
+
+            Vertex from = cl.from;
+            Vertex to = cl.to;
+
+            DeleteEdge(cl);
+
+            var toAdd = new Vertex(newVertexLocation, r, wid);
+            vertices.Add(toAdd);
+            //AddVertex(newVertexLocation);
+            AddEdge(from, LastVertex);
+            AddEdge(LastVertex, to);
+            return newVertexLocation;
         }
 
 
