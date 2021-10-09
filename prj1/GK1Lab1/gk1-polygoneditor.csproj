@@ -53,11 +53,11 @@
     <Compile Include="Class\EdgeConstraint.cs" />
     <Compile Include="Class\FigureSet.cs" />
     <Compile Include="Class\MirroredPolygon.cs" />
-    <Compile Include="Class\ObjectCopier.cs" />
+    <Compile Include="Helper\ObjectCopier.cs" />
     <Compile Include="Enum\Direction.cs" />
     <Compile Include="Enum\MirrorType.cs" />
     <Compile Include="Class\Polygon.cs" />
-    <Compile Include="Class\LineDrawer.cs" />
+    <Compile Include="Helper\LineDrawer.cs" />
     <Compile Include="Enum\EdgeConstraintType.cs" />
     <Compile Include="Enum\InteractionMode.cs" />
     <Compile Include="Class\Edge.cs" />
@@ -67,6 +67,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interface\IConstraint.cs" />
     <Compile Include="Interface\IFigure.cs" />
     <Compile Include="Interface\IFigureElement.cs" />
     <Compile Include="Class\Program.cs" />

@@ -124,32 +124,21 @@ namespace ComputerGraphicsLab1
                 switch (InteractionMode)
                 {
                     case InteractionMode.CREATE_NEW:
-                        if (selectedFigure is MirroredPolygon)
+                        if (selectedFigure is Circle)
                         {
+                            //Case for circle
+                            var circle = (Circle)selectedFigure;
+                            var center = circle.Center;
 
-                            var mirr = (MirroredPolygon)selectedFigure;
-                            var poly = (Polygon)mirr.Figures.First();
-
-                            if (mirr.MirrorPoint.X == -300 && mirr.MirrorPoint.Y == -300)
+                            if (center.Location.X == -300 && center.Location.Y == -300)
+                                circle.Center.SetLocation(loc);
+                            else
                             {
-                                mirr.MirrorPoint = loc;
-                                break;
-                            }
-                                
-                            var clicked = poly.ClickedOn(loc);
-                            if (poly.VertexCount >= 2 && clicked == poly.FirstVertex)
-                            {
-                                poly.AddEdge(poly.LastVertex, poly.FirstVertex);
-                                poly.Closed = true;
-                                mirr.GenerateAllMirroredPolygons();
+                                circle.Radius = circle.GetRadius(loc);
                                 selectedFigure = null;
                                 InteractionMode = InteractionMode.EDIT;
                                 break;
                             }
-                            var v = poly.AddVertex(e.Location);
-
-                            if (poly.VertexCount != 1)
-                                poly.AddEdge(poly.BeforeLastVertex, poly.LastVertex);
                         }
                         else if (selectedFigure is Polygon)
                         {
@@ -167,22 +156,33 @@ namespace ComputerGraphicsLab1
 
                             if (poly.VertexCount != 1)
                                 poly.AddEdge(poly.BeforeLastVertex, poly.LastVertex);
-                        } else
-                        {
-                            //Case for circle
-                            var circle = (Circle)selectedFigure;
-                            var center = circle.Center;
+                        } 
+                        //else if (selectedFigure is MirroredPolygon)
+                        //{
+                        //    var mirr = (MirroredPolygon)selectedFigure;
+                        //    var poly = (Polygon)mirr.Figures.First();
 
-                            if (center.Location.X == -300 && center.Location.Y == -300)
-                                circle.Center.SetLocation(loc);
-                            else
-                            {
-                                circle.Radius = circle.GetRadius(loc);
-                                selectedFigure = null;
-                                InteractionMode = InteractionMode.EDIT;
-                                break;
-                            }
-                        }  
+                        //    if (mirr.MirrorPoint.X == -300 && mirr.MirrorPoint.Y == -300)
+                        //    {
+                        //        mirr.MirrorPoint = loc;
+                        //        break;
+                        //    }
+
+                        //    var clicked = poly.ClickedOn(loc);
+                        //    if (poly.VertexCount >= 2 && clicked == poly.FirstVertex)
+                        //    {
+                        //        poly.AddEdge(poly.LastVertex, poly.FirstVertex);
+                        //        poly.Closed = true;
+                        //        mirr.GenerateAllMirroredPolygons();
+                        //        selectedFigure = null;
+                        //        InteractionMode = InteractionMode.EDIT;
+                        //        break;
+                        //    }
+                        //    var v = poly.AddVertex(e.Location);
+
+                        //    if (poly.VertexCount != 1)
+                        //        poly.AddEdge(poly.BeforeLastVertex, poly.LastVertex);
+                        //}  
                         break;
                     case InteractionMode.EDIT:
                         if (figSet.SelectedElement != null && figSet.SelectedElement is Vertex)
