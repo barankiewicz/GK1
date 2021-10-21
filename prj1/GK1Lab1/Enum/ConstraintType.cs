@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace ComputerGraphicsLab1
 {
-    public enum EdgeConstraintType
+    public enum ConstraintType
     {
         NONE,
         CONSTRAINT_EQUAL,
-        CONSTRAINT_PARALLEL
+        CONSTRAINT_PARALLEL,
+        CONSTRAINT_SET_LENGTH,
+        CONSTRAINT_SET_RADIUS,
+        CONTRAINT_TANGENT
     }
 }

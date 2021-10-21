@@ -32,6 +32,7 @@ namespace ComputerGraphicsLab1
         public Vertex LastVertex { get => vertices.LastOrDefault(); }
         public Vertex BeforeLastVertex { get => vertices.ElementAtOrDefault(vertices.Count - 2); }
         public Color FigureColor { get; set; }
+        public ICollection<IConstraint> Constraints { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public Polygon(int _r, float _wid, Color col)
         {

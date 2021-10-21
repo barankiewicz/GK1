@@ -23,6 +23,7 @@ namespace ComputerGraphicsLab1.Class
         public ICollection<IFigure> Figures { get; }
         public IFigure SelectedFigure { get; set; }
         public IFigureElement SelectedElement { get; set; }
+        public ICollection<IConstraint> Constraints { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         protected IFigureElement selected;
 

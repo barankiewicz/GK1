@@ -193,6 +193,21 @@ namespace ComputerGraphicsLab1
                     case InteractionMode.MOVE:
                         labelOffset = e.Location;
                         break;
+                    //case InteractionMode.CONSTRAINT_PARALLEL:
+                    //    if (clicked is Edge)
+                    //    {
+                    //        polygon.AddConstraint(EdgeConstraintType.CONSTRAINT_PARALLEL, (Edge)clickedElement, (Edge)clicked);
+                    //        InteractionMode = InteractionMode.EDIT;
+                    //    }
+                    //    else
+                    //    {
+                    //        clickedElement = null;
+                    //        clickedElementSecond = null;
+                    //        polygon.SetSelected(null);
+                    //        polygon.DrawPolygon(mainWind);
+                    //        InteractionMode = InteractionMode.EDIT;
+                    //    }
+                    //    break;
                 }
 
             }
@@ -553,6 +568,26 @@ namespace ComputerGraphicsLab1
         {
             figSet.AntiAliasing = ((CheckBox)sender).Checked;
             figSet.Draw(mainWind);
+        }
+
+        private void newConstraintRadius_Click(object sender, EventArgs e)
+        {
+            if (figSet.SelectedFigure is Circle)
+            {
+                var cir = (Circle)(figSet.SelectedFigure);
+
+                using (RadiusForm form2 = new RadiusForm(cir.Radius))
+                {
+                    form2.ShowDialog();
+                    if (form2.endValue != -1)
+                        cir.AddSetRadiusConstraint(form2.endValue);
+                }
+                figSet.Draw(mainWind);
+            }
+            else
+            {
+                MessageBox.Show("First select a circle, then click the constraint button!");
+            }
         }
     }
 }

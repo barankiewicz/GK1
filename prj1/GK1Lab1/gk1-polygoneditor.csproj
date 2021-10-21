@@ -50,15 +50,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\Circle.cs" />
-    <Compile Include="Class\EdgeConstraint.cs" />
+    <Compile Include="Constraint\EdgeConstraint.cs" />
     <Compile Include="Class\FigureSet.cs" />
     <Compile Include="Class\MirroredPolygon.cs" />
+    <Compile Include="Constraint\EqualConstraint.cs" />
+    <Compile Include="Constraint\ParallelConstraint.cs" />
+    <Compile Include="Constraint\SetLengthConstraint.cs" />
+    <Compile Include="Constraint\SetRadiusConstraint.cs" />
+    <Compile Include="Constraint\TangentConstraint.cs" />
     <Compile Include="Helper\ObjectCopier.cs" />
     <Compile Include="Enum\Direction.cs" />
     <Compile Include="Enum\MirrorType.cs" />
     <Compile Include="Class\Polygon.cs" />
     <Compile Include="Helper\LineDrawer.cs" />
-    <Compile Include="Enum\EdgeConstraintType.cs" />
+    <Compile Include="Enum\ConstraintType.cs" />
     <Compile Include="Enum\InteractionMode.cs" />
     <Compile Include="Class\Edge.cs" />
     <Compile Include="Form1.cs">
@@ -67,17 +72,30 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interface\ICircleConstraint.cs" />
+    <Compile Include="Interface\ICircleEdgeConstraint.cs" />
     <Compile Include="Interface\IConstraint.cs" />
+    <Compile Include="Interface\IDoubleEdgeConstraint.cs" />
+    <Compile Include="Interface\IEdgeConstraint.cs" />
     <Compile Include="Interface\IFigure.cs" />
     <Compile Include="Interface\IFigureElement.cs" />
     <Compile Include="Class\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Class\Vertex.cs" />
+    <Compile Include="RadiusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RadiusForm.Designer.cs">
+      <DependentUpon>RadiusForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.en.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RadiusForm.resx">
+      <DependentUpon>RadiusForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -13,10 +13,10 @@ namespace ComputerGraphicsLab1.Class
     {
         private Edge edge1;
         private Edge edge2;
-        private EdgeConstraintType edgeConstraintType;
+        private ConstraintType edgeConstraintType;
         private int id;
 
-        public EdgeConstraint(EdgeConstraintType type, Edge e1, Edge e2, int id_)
+        public EdgeConstraint(ConstraintType type, Edge e1, Edge e2, int id_)
         {
             edgeConstraintType = type;
             edge1 = e1;
@@ -38,7 +38,7 @@ namespace ComputerGraphicsLab1.Class
 
 
                
-            if(edgeConstraintType == EdgeConstraintType.CONSTRAINT_EQUAL) 
+            if(edgeConstraintType == ConstraintType.CONSTRAINT_EQUAL) 
             {
                 loc1.Offset(3, 6);
                 loc2.Offset(3, 6);
@@ -102,10 +102,10 @@ namespace ComputerGraphicsLab1.Class
             if (!ContainsEdge(e)) return;
             var e2 = GetOtherEdge(e);
 
-            if(edgeConstraintType == EdgeConstraintType.CONSTRAINT_EQUAL)
+            if(edgeConstraintType == ConstraintType.CONSTRAINT_EQUAL)
             {
                 e2.SetLength(e.GetLength());
-            } else if(edgeConstraintType == EdgeConstraintType.CONSTRAINT_PARALLEL)
+            } else if(edgeConstraintType == ConstraintType.CONSTRAINT_PARALLEL)
             {
                 double slopeToSet = e.GetSlope();
                 e2.SetSlope(slopeToSet, rightmost);

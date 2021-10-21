@@ -10,6 +10,11 @@ namespace ComputerGraphicsLab1
     {
         CREATE_NEW,
         EDIT,
-        MOVE
+        MOVE,
+        CONSTRAINT_EQUAL,
+        CONSTRAINT_PARALLEL,
+        CONSTRAINT_SET_LENGTH,
+        CONSTRAINT_SET_RADIUS,
+        CONTRAINT_TANGENT
     }
 }

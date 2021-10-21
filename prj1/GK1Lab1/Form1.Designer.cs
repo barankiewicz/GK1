@@ -32,6 +32,11 @@
             this.menuPanel = new System.Windows.Forms.TableLayoutPanel();
             this.editBox = new System.Windows.Forms.GroupBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.newConstraintParallel = new System.Windows.Forms.Button();
+            this.newConstraintTangent = new System.Windows.Forms.Button();
+            this.newConstraintEqualEdges = new System.Windows.Forms.Button();
+            this.newConstraintLength = new System.Windows.Forms.Button();
+            this.newConstraintRadius = new System.Windows.Forms.Button();
             this.antialiasing = new System.Windows.Forms.CheckBox();
             this.deleteFigureButton = new System.Windows.Forms.Button();
             this.newCircleButton = new System.Windows.Forms.Button();
@@ -49,11 +54,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.newConstraintRadius = new System.Windows.Forms.Button();
-            this.newConstraintLength = new System.Windows.Forms.Button();
-            this.newConstraintEqualEdges = new System.Windows.Forms.Button();
-            this.newConstraintTangent = new System.Windows.Forms.Button();
-            this.newConstraintParallel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainWind)).BeginInit();
             this.menuPanel.SuspendLayout();
             this.editBox.SuspendLayout();
@@ -130,6 +130,62 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(200, 463);
             this.panel2.TabIndex = 4;
+            // 
+            // newConstraintParallel
+            // 
+            this.newConstraintParallel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newConstraintParallel.Location = new System.Drawing.Point(1, 196);
+            this.newConstraintParallel.Name = "newConstraintParallel";
+            this.newConstraintParallel.Size = new System.Drawing.Size(199, 34);
+            this.newConstraintParallel.TabIndex = 20;
+            this.newConstraintParallel.Text = "New Constraint - Parallel Edges";
+            this.newConstraintParallel.UseVisualStyleBackColor = true;
+            // 
+            // newConstraintTangent
+            // 
+            this.newConstraintTangent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newConstraintTangent.Location = new System.Drawing.Point(0, 164);
+            this.newConstraintTangent.Name = "newConstraintTangent";
+            this.newConstraintTangent.Size = new System.Drawing.Size(199, 34);
+            this.newConstraintTangent.TabIndex = 19;
+            this.newConstraintTangent.Text = "New Constraint - Tangent edge";
+            this.newConstraintTangent.UseVisualStyleBackColor = true;
+            // 
+            // newConstraintEqualEdges
+            // 
+            this.newConstraintEqualEdges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newConstraintEqualEdges.Location = new System.Drawing.Point(0, 133);
+            this.newConstraintEqualEdges.Name = "newConstraintEqualEdges";
+            this.newConstraintEqualEdges.Size = new System.Drawing.Size(199, 34);
+            this.newConstraintEqualEdges.TabIndex = 18;
+            this.newConstraintEqualEdges.Text = "New Constraint - Equal Edges";
+            this.newConstraintEqualEdges.UseVisualStyleBackColor = true;
+            // 
+            // newConstraintLength
+            // 
+            this.newConstraintLength.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newConstraintLength.Location = new System.Drawing.Point(0, 102);
+            this.newConstraintLength.Name = "newConstraintLength";
+            this.newConstraintLength.Size = new System.Drawing.Size(199, 34);
+            this.newConstraintLength.TabIndex = 17;
+            this.newConstraintLength.Text = "New Constraint - Set Length";
+            this.newConstraintLength.UseVisualStyleBackColor = true;
+            // 
+            // newConstraintRadius
+            // 
+            this.newConstraintRadius.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newConstraintRadius.Location = new System.Drawing.Point(1, 71);
+            this.newConstraintRadius.Name = "newConstraintRadius";
+            this.newConstraintRadius.Size = new System.Drawing.Size(199, 34);
+            this.newConstraintRadius.TabIndex = 16;
+            this.newConstraintRadius.Text = "New Constraint - Set Radius";
+            this.newConstraintRadius.UseVisualStyleBackColor = true;
+            this.newConstraintRadius.Click += new System.EventHandler(this.newConstraintRadius_Click);
             // 
             // antialiasing
             // 
@@ -302,61 +358,6 @@
             // 
             this.openFileDialog.FileName = "SavedCanvas";
             this.openFileDialog.Filter = "Canvas file | *.canvas";
-            // 
-            // newConstraintRadius
-            // 
-            this.newConstraintRadius.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.newConstraintRadius.Location = new System.Drawing.Point(1, 71);
-            this.newConstraintRadius.Name = "newConstraintRadius";
-            this.newConstraintRadius.Size = new System.Drawing.Size(199, 34);
-            this.newConstraintRadius.TabIndex = 16;
-            this.newConstraintRadius.Text = "New Constraint - Set Radius";
-            this.newConstraintRadius.UseVisualStyleBackColor = true;
-            // 
-            // newConstraintLength
-            // 
-            this.newConstraintLength.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.newConstraintLength.Location = new System.Drawing.Point(0, 102);
-            this.newConstraintLength.Name = "newConstraintLength";
-            this.newConstraintLength.Size = new System.Drawing.Size(199, 34);
-            this.newConstraintLength.TabIndex = 17;
-            this.newConstraintLength.Text = "New Constraint - Set Length";
-            this.newConstraintLength.UseVisualStyleBackColor = true;
-            // 
-            // newConstraintEqualEdges
-            // 
-            this.newConstraintEqualEdges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.newConstraintEqualEdges.Location = new System.Drawing.Point(0, 133);
-            this.newConstraintEqualEdges.Name = "newConstraintEqualEdges";
-            this.newConstraintEqualEdges.Size = new System.Drawing.Size(199, 34);
-            this.newConstraintEqualEdges.TabIndex = 18;
-            this.newConstraintEqualEdges.Text = "New Constraint - Equal Edges";
-            this.newConstraintEqualEdges.UseVisualStyleBackColor = true;
-            // 
-            // newConstraintTangent
-            // 
-            this.newConstraintTangent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.newConstraintTangent.Location = new System.Drawing.Point(0, 164);
-            this.newConstraintTangent.Name = "newConstraintTangent";
-            this.newConstraintTangent.Size = new System.Drawing.Size(199, 34);
-            this.newConstraintTangent.TabIndex = 19;
-            this.newConstraintTangent.Text = "New Constraint - Tangent edge";
-            this.newConstraintTangent.UseVisualStyleBackColor = true;
-            // 
-            // newConstraintParallel
-            // 
-            this.newConstraintParallel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.newConstraintParallel.Location = new System.Drawing.Point(1, 196);
-            this.newConstraintParallel.Name = "newConstraintParallel";
-            this.newConstraintParallel.Size = new System.Drawing.Size(199, 34);
-            this.newConstraintParallel.TabIndex = 20;
-            this.newConstraintParallel.Text = "New Constraint - Parallel Edges";
-            this.newConstraintParallel.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

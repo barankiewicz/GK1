@@ -1,4 +1,6 @@
-﻿using ComputerGraphicsLab1.Interface;
+﻿using ComputerGraphicsLab1.Class;
+using ComputerGraphicsLab1.Constraint;
+using ComputerGraphicsLab1.Interface;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,16 +10,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ComputerGraphicsLab1.Class
+namespace ComputerGraphicsLab1
 {
     [Serializable]
-    class Circle : IFigure, IFigureElement
+    public class Circle : IFigure, IFigureElement
     {
         public double Radius { get; set; }
         public Vertex Center { get; set; }
         public Color FigureColor { get; set; }
         public bool CircleClicked { get; set; }
         public bool CenterClicked { get; set; }
+        public ICollection<IConstraint> Constraints { get; set; }
 
         public Circle(double r, Vertex c, Color col)
         {
@@ -26,6 +29,7 @@ namespace ComputerGraphicsLab1.Class
             FigureColor = col;
             CircleClicked = false;
             CenterClicked = false;
+            Constraints = new List<IConstraint>();
         }
 
         public IFigureElement ClickedOn(Point click)
@@ -65,6 +69,9 @@ namespace ComputerGraphicsLab1.Class
                     (float)(2 * Radius),
                     (float)(2 * Radius)
                     );
+
+            foreach (IConstraint c in Constraints)
+                c.Draw(g, false);
         }
 
         public void Offset(Point p)
@@ -119,6 +126,11 @@ namespace ComputerGraphicsLab1.Class
         public IFigureElement GetSelected()
         {
             return new Vertex();
+        }
+
+        internal void AddSetRadiusConstraint(double constRadius)
+        {
+            Constraints.Add(new SetRadiusConstraint(0, this, Constraints.Count + 1));
         }
     }
 }

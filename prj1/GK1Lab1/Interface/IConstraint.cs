@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ComputerGraphicsLab1.Interface
 {
-    interface IConstraint
+    public interface IConstraint
     {
-        IFigure Figure1 { get; }
-
+        int Id { get; }
         void ApplyConstraint();
+
+        void Draw(Graphics g, bool selected, Point? cursor = null);
     }
 }

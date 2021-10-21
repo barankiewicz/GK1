@@ -11,6 +11,7 @@ namespace ComputerGraphicsLab1.Interface
     public interface IFigure
     {
         Color FigureColor { get; set; }
+        ICollection<IConstraint> Constraints { get; set; }
         IFigureElement ClickedOn(Point click);
 
         void SetSelected(IFigureElement v);
