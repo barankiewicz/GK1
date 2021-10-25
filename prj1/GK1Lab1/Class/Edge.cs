@@ -69,14 +69,6 @@ namespace ComputerGraphicsLab1
             return isOnLine;
         }
 
-        public double GetSlope()
-        {
-            var delY = to.Location.Y - from.Location.Y;
-            var delX = to.Location.X - from.Location.X;
-            double slope = (double)delY / (double)delX;
-            return slope;
-        }
-
         public bool IsNeighbour(Edge e)
         {
             return this.from == e.to || this.to == e.from || this.from == e.from || this.to == e.to;
@@ -106,12 +98,35 @@ namespace ComputerGraphicsLab1
             to.Location = new Point((int)x3, (int)y3);
         }
 
-        internal void SetSlope(double a, bool rightmost)
+        internal void SetSlope((double alfa, double dY, double dX) val, bool rightmost)
         {
+            var ourSlope = GetSlope(rightmost);
+
+            var degToRotate = ourSlope.alfa - val.alfa;
             var pointToMove = rightmost ? Rightmost : Leftmost;
             var other = GetOther(pointToMove);
-            pointToMove.Location = new Point(pointToMove.Location.X, (int)(pointToMove.Location.X * a + other.Location.Y));
+
+            //var x = other.Location.X + val.dX;
+            //var y = other.Location.Y + val.dY;
+
+            var x = pointToMove.Location.X * Math.Cos(degToRotate) - pointToMove.Location.Y * Math.Sin(degToRotate);
+            var y = pointToMove.Location.X * Math.Sin(degToRotate) + pointToMove.Location.Y * Math.Cos(degToRotate);
+
+            pointToMove.Location = new Point((int)(x), (int)(y));
 
         }
+
+        public (double alfa, double dY, double dX) GetSlope(bool rightmost)
+        {
+            var to = rightmost ? Leftmost : Rightmost;
+            var from = rightmost ? Rightmost : Leftmost;
+
+            var delY = to.Location.Y - from.Location.Y;
+            var delX = to.Location.X - from.Location.X == 0 ? 0.1 : (to.Location.X - from.Location.X);
+            
+            double slope = (double)delY / (double)delX;
+            return (Math.Atan(slope), delY, delX);
+        }
+
     }
 }

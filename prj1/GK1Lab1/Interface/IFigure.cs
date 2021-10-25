@@ -20,5 +20,7 @@ namespace ComputerGraphicsLab1.Interface
         void Offset(Point p);
 
         void DeleteElement(IFigureElement element);
+
+        bool HasElement(IFigureElement element);
     }
 }

@@ -9,39 +9,33 @@ using System.Threading.Tasks;
 
 namespace ComputerGraphicsLab1.Constraint
 {
+    [Serializable]
     public class SetRadiusConstraint : ICircleConstraint, IFigureElement
     {
         public int Id { get; }
         public Circle Circle { get; }
         public double ConstraintRadius { get; }
 
-        public SetRadiusConstraint(int id, Circle c, double constRadius)
+        public SetRadiusConstraint(Circle c, double constRadius, int id)
         {
             Id = id;
             Circle = c;
             ConstraintRadius = constRadius;
         }
 
-        public void ApplyConstraint()
-        {
-            Circle.Radius = ConstraintRadius;
-        }
-
-        public void Draw(Graphics g, bool selected, Point? cursor = null)
+        public void Draw(Graphics g, bool selected, IFigure f)
         {
             Point loc = Circle.GetLocation();
 
+            loc.Offset(Id % 2 == 0 ? 15 : -15, 10);
+
             g.FillRectangle(new SolidBrush(selected ? Color.Blue : Color.DarkGreen), new Rectangle(loc, new Size(16, 16)));
 
-            loc.Offset(3, 2);
-            loc.Offset(3, 2);
+            loc.Offset(2, 2);
             DrawCircleSign(g, loc);
-            loc.Offset(0, 4);
-            loc.Offset(0, 4);
 
 
-            loc.Offset(9, 5);
-            loc.Offset(9, 5);
+            loc.Offset(11, 8);
 
             StringFormat sf = new StringFormat();
             sf.LineAlignment = StringAlignment.Center;
@@ -62,6 +56,8 @@ namespace ComputerGraphicsLab1.Constraint
             {
                 Point loc = Circle.GetLocation();
 
+                loc.Offset(Id % 2 == 0 ? 15 : -15, 10);
+
                 path.AddRectangle(new Rectangle(loc, new Size(16, 16)));
                 isOnLine = path.IsVisible(p);
             }
@@ -75,9 +71,19 @@ namespace ComputerGraphicsLab1.Constraint
 
         public void DrawCircleSign(Graphics g, Point p)
         {
-            g.FillEllipse(new SolidBrush(Color.White), new Rectangle(p, new Size(8, 8)));
+            g.DrawEllipse(new Pen(new SolidBrush(Color.White)), new Rectangle(p, new Size(8, 8)));
             p.Offset(3, 0);
             p.Offset(-3, -3);
+        }
+
+        public void ApplyConstraint(Point p, IFigureElement e, bool rightmost)
+        {
+            Circle.Radius = ConstraintRadius;
+        }
+
+        public bool ContainsElement(IFigureElement e)
+        {
+            return e == Circle;
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ComputerGraphicsLab1.Constraint
 {
+    [Serializable]
     public class TangentConstraint : ICircleEdgeConstraint, IFigureElement
     {
         public int Id { get; set; }
@@ -20,7 +21,17 @@ namespace ComputerGraphicsLab1.Constraint
             throw new NotImplementedException();
         }
 
-        public void Draw(Graphics g, bool selected, Point? cursor = null)
+        public void ApplyConstraint(Point p, IFigureElement e, bool rightmost)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsElement(IFigureElement e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Draw(Graphics g, bool selected, IFigure f)
         {
             throw new NotImplementedException();
         }

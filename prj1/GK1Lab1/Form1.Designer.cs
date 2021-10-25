@@ -71,7 +71,7 @@
             this.mainWind.BackColor = System.Drawing.Color.White;
             this.mainWind.Location = new System.Drawing.Point(0, 0);
             this.mainWind.Name = "mainWind";
-            this.mainWind.Size = new System.Drawing.Size(601, 616);
+            this.mainWind.Size = new System.Drawing.Size(984, 761);
             this.mainWind.TabIndex = 1;
             this.mainWind.TabStop = false;
             this.mainWind.Paint += new System.Windows.Forms.PaintEventHandler(this.mainWind_Paint);
@@ -88,13 +88,13 @@
             this.menuPanel.Controls.Add(this.editBox, 0, 0);
             this.menuPanel.Controls.Add(this.saveBox, 0, 2);
             this.menuPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.menuPanel.Location = new System.Drawing.Point(601, 0);
+            this.menuPanel.Location = new System.Drawing.Point(984, 0);
             this.menuPanel.Name = "menuPanel";
             this.menuPanel.RowCount = 3;
             this.menuPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.menuPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.menuPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.menuPanel.Size = new System.Drawing.Size(200, 616);
+            this.menuPanel.Size = new System.Drawing.Size(200, 761);
             this.menuPanel.TabIndex = 2;
             // 
             // editBox
@@ -103,7 +103,7 @@
             this.editBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.editBox.Location = new System.Drawing.Point(3, 3);
             this.editBox.Name = "editBox";
-            this.editBox.Size = new System.Drawing.Size(194, 482);
+            this.editBox.Size = new System.Drawing.Size(194, 627);
             this.editBox.TabIndex = 0;
             this.editBox.TabStop = false;
             this.editBox.Text = "Menu";
@@ -128,24 +128,27 @@
             this.panel2.Controls.Add(this.newPolygonButton);
             this.panel2.Location = new System.Drawing.Point(-3, 19);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(200, 463);
+            this.panel2.Size = new System.Drawing.Size(200, 608);
             this.panel2.TabIndex = 4;
             // 
             // newConstraintParallel
             // 
             this.newConstraintParallel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.newConstraintParallel.Enabled = false;
             this.newConstraintParallel.Location = new System.Drawing.Point(1, 196);
             this.newConstraintParallel.Name = "newConstraintParallel";
             this.newConstraintParallel.Size = new System.Drawing.Size(199, 34);
             this.newConstraintParallel.TabIndex = 20;
             this.newConstraintParallel.Text = "New Constraint - Parallel Edges";
             this.newConstraintParallel.UseVisualStyleBackColor = true;
+            this.newConstraintParallel.Click += new System.EventHandler(this.newConstraintParallel_Click);
             // 
             // newConstraintTangent
             // 
             this.newConstraintTangent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.newConstraintTangent.Enabled = false;
             this.newConstraintTangent.Location = new System.Drawing.Point(0, 164);
             this.newConstraintTangent.Name = "newConstraintTangent";
             this.newConstraintTangent.Size = new System.Drawing.Size(199, 34);
@@ -163,6 +166,7 @@
             this.newConstraintEqualEdges.TabIndex = 18;
             this.newConstraintEqualEdges.Text = "New Constraint - Equal Edges";
             this.newConstraintEqualEdges.UseVisualStyleBackColor = true;
+            this.newConstraintEqualEdges.Click += new System.EventHandler(this.newConstraintEqualEdges_Click);
             // 
             // newConstraintLength
             // 
@@ -174,6 +178,7 @@
             this.newConstraintLength.TabIndex = 17;
             this.newConstraintLength.Text = "New Constraint - Set Length";
             this.newConstraintLength.UseVisualStyleBackColor = true;
+            this.newConstraintLength.Click += new System.EventHandler(this.newConstraintLength_Click);
             // 
             // newConstraintRadius
             // 
@@ -196,6 +201,7 @@
             this.antialiasing.TabIndex = 15;
             this.antialiasing.Text = "Antialiasing";
             this.antialiasing.UseVisualStyleBackColor = true;
+            this.antialiasing.Visible = false;
             this.antialiasing.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // deleteFigureButton
@@ -286,7 +292,7 @@
             // 
             this.saveBox.Controls.Add(this.tableLayoutPanel3);
             this.saveBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveBox.Location = new System.Drawing.Point(3, 499);
+            this.saveBox.Location = new System.Drawing.Point(3, 644);
             this.saveBox.Name = "saveBox";
             this.saveBox.Size = new System.Drawing.Size(194, 114);
             this.saveBox.TabIndex = 2;
@@ -347,7 +353,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(601, 616);
+            this.panel1.Size = new System.Drawing.Size(984, 761);
             this.panel1.TabIndex = 4;
             // 
             // saveFileDialog
@@ -363,11 +369,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(801, 616);
+            this.ClientSize = new System.Drawing.Size(1184, 761);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureContainer);
             this.Controls.Add(this.menuPanel);
-            this.MinimumSize = new System.Drawing.Size(817, 655);
+            this.MinimumSize = new System.Drawing.Size(1000, 600);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Polygon Editor";

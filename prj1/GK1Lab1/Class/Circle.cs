@@ -15,6 +15,7 @@ namespace ComputerGraphicsLab1
     [Serializable]
     public class Circle : IFigure, IFigureElement
     {
+        protected Interface.IFigureElement selected;
         public double Radius { get; set; }
         public Vertex Center { get; set; }
         public Color FigureColor { get; set; }
@@ -34,6 +35,12 @@ namespace ComputerGraphicsLab1
 
         public IFigureElement ClickedOn(Point click)
         {
+            foreach (IConstraint c in Constraints)
+            {
+                if (c.IsClicked(click))
+                    return c;
+            }
+
             if (Center.IsClicked(click))
             {
                 CircleClicked = false;
@@ -59,8 +66,9 @@ namespace ComputerGraphicsLab1
             if (cursor != null)
                 Radius = GetRadius((Point)cursor);
 
-            if (customLines)
-                LineDrawer.DrawCustomEllipse(g, Center.GetLocation(), (int)Radius, cursor != null ? Color.Red : CircleClicked ? Color.DarkOrange : FigureColor, antialiasing);
+            if (false)
+                return;
+            //LineDrawer.DrawCustomEllipse(g, Center.GetLocation(), (int)Radius, cursor != null ? Color.Red : CircleClicked ? Color.DarkOrange : FigureColor, antialiasing);
             else
                 g.DrawEllipse(
                     new Pen(cursor != null ? Color.Red : CircleClicked ? Color.DarkOrange : FigureColor, 3.5f),
@@ -71,7 +79,7 @@ namespace ComputerGraphicsLab1
                     );
 
             foreach (IConstraint c in Constraints)
-                c.Draw(g, false);
+                c.Draw(g, selected == c, this);
         }
 
         public void Offset(Point p)
@@ -115,12 +123,12 @@ namespace ComputerGraphicsLab1
 
         void IFigure.DeleteElement(IFigureElement element)
         {
-            return;
+            if (Constraints.Contains(element)) Constraints.Remove((IConstraint)element);
         }
 
         public void SetSelected(IFigureElement v)
         {
-            return;
+            selected = v;
         }
 
         public IFigureElement GetSelected()
@@ -128,9 +136,9 @@ namespace ComputerGraphicsLab1
             return new Vertex();
         }
 
-        internal void AddSetRadiusConstraint(double constRadius)
+        public bool HasElement(IFigureElement element)
         {
-            Constraints.Add(new SetRadiusConstraint(0, this, Constraints.Count + 1));
+            return this == element || Center == element;
         }
     }
 }

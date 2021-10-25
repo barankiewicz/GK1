@@ -66,8 +66,8 @@ namespace ComputerGraphicsLab1
 
             r = 5;
             wid = 2f;
-            figSet = new FigureSet();
-            //figSet = GeneratePolygonExample();
+            //figSet = new FigureSet();
+            figSet = GeneratePolygonExample();
             InteractionMode = InteractionMode.EDIT;
             deleteVertexButton.Enabled = false;
             figSet.Draw(mainWind);
@@ -76,33 +76,67 @@ namespace ComputerGraphicsLab1
         private FigureSet GeneratePolygonExample()
         {
             FigureSet set = new FigureSet();
+
+            //Figures
             Polygon ret = new Polygon(r, wid, Color.Black);
-            var v1 = ret.AddVertex(new Point(150, 350));
+            ret.AddVertex(new Point(150, 350));
 
-            var v2 = ret.AddVertex(new Point(150, 200));
+            ret.AddVertex(new Point(150, 200));
             ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
 
-            var v3 = ret.AddVertex(new Point(250, 100));
+            ret.AddVertex(new Point(250, 100));
             ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
 
-            var v4 = ret.AddVertex(new Point(400, 100));
+            ret.AddVertex(new Point(400, 100));
             ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
 
-            var v5 = ret.AddVertex(new Point(500, 200));
+            ret.AddVertex(new Point(500, 200));
             ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
 
-            var v6 = ret.AddVertex(new Point(500, 350));
+            ret.AddVertex(new Point(500, 350));
             ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
 
-            var v7 = ret.AddVertex(new Point(400, 450));
+            ret.AddVertex(new Point(400, 450));
             ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
 
-            var v8 = ret.AddVertex(new Point(250, 450));
+            ret.AddVertex(new Point(250, 450));
             ret.AddEdge(ret.BeforeLastVertex, ret.LastVertex);
 
             ret.AddEdge(ret.LastVertex, ret.FirstVertex);
 
+            Polygon pol2 = new Polygon(r, wid, Color.Black);
+            pol2.AddVertex(new Point(550, 250));
+
+            pol2.AddVertex(new Point(700, 275));
+            pol2.AddEdge(pol2.BeforeLastVertex, pol2.LastVertex);
+
+            pol2.AddVertex(new Point(600, 575));
+            pol2.AddEdge(pol2.BeforeLastVertex, pol2.LastVertex);
+
+            pol2.AddVertex(new Point(500, 450));
+            pol2.AddEdge(pol2.BeforeLastVertex, pol2.LastVertex);
+
+            pol2.AddEdge(pol2.LastVertex, pol2.FirstVertex);
+
+            pol2.Offset(new Point(50, 0));
+
+            Circle c = new Circle(100, new Vertex(new Point(400, 600), r, wid), Color.Black);
+
+            Circle c2 = new Circle(75, new Vertex(new Point(650, 575), r, wid), Color.Black);
+
             set.AddFigure(ret);
+            set.AddFigure(pol2);
+            set.AddFigure(c);
+            set.AddFigure(c2);
+
+            //Constraints
+
+            set.AddSetLengthConstraint(ret.edges[ret.edges.Count - 2], ret.edges[ret.edges.Count - 2].GetLength(), ret);
+            set.AddSetLengthConstraint(pol2.edges[pol2.edges.Count - 2], pol2.edges[pol2.edges.Count - 2].GetLength(), pol2);
+            set.AddEqualConstraint(ret.edges[ret.edges.Count - 3], pol2.edges[pol2.edges.Count - 3], ret, pol2);
+            set.AddSetRadiusConstraint(c, 100);
+
+
             return set;
         }
 
@@ -117,13 +151,14 @@ namespace ComputerGraphicsLab1
         private void mainWind_MouseDown(object sender, MouseEventArgs e)
         {
             var loc = e.Location;
-            figSet.RefreshClickedOnFigureAndElement(loc);
+            
             if (e.Button == MouseButtons.Left)
             {
                 st.Start();
                 switch (InteractionMode)
                 {
                     case InteractionMode.CREATE_NEW:
+                        figSet.RefreshClickedOnFigureAndElement(loc);
                         if (selectedFigure is Circle)
                         {
                             //Case for circle
@@ -157,57 +192,50 @@ namespace ComputerGraphicsLab1
                             if (poly.VertexCount != 1)
                                 poly.AddEdge(poly.BeforeLastVertex, poly.LastVertex);
                         } 
-                        //else if (selectedFigure is MirroredPolygon)
-                        //{
-                        //    var mirr = (MirroredPolygon)selectedFigure;
-                        //    var poly = (Polygon)mirr.Figures.First();
-
-                        //    if (mirr.MirrorPoint.X == -300 && mirr.MirrorPoint.Y == -300)
-                        //    {
-                        //        mirr.MirrorPoint = loc;
-                        //        break;
-                        //    }
-
-                        //    var clicked = poly.ClickedOn(loc);
-                        //    if (poly.VertexCount >= 2 && clicked == poly.FirstVertex)
-                        //    {
-                        //        poly.AddEdge(poly.LastVertex, poly.FirstVertex);
-                        //        poly.Closed = true;
-                        //        mirr.GenerateAllMirroredPolygons();
-                        //        selectedFigure = null;
-                        //        InteractionMode = InteractionMode.EDIT;
-                        //        break;
-                        //    }
-                        //    var v = poly.AddVertex(e.Location);
-
-                        //    if (poly.VertexCount != 1)
-                        //        poly.AddEdge(poly.BeforeLastVertex, poly.LastVertex);
-                        //}  
                         break;
                     case InteractionMode.EDIT:
+                        figSet.RefreshClickedOnFigureAndElement(loc);
                         if (figSet.SelectedElement != null && figSet.SelectedElement is Vertex)
                             deleteVertexButton.Enabled = true;
                         else
                             deleteVertexButton.Enabled = false;
                         break;
                     case InteractionMode.MOVE:
+                        figSet.RefreshClickedOnFigureAndElement(loc);
                         labelOffset = e.Location;
                         break;
-                    //case InteractionMode.CONSTRAINT_PARALLEL:
-                    //    if (clicked is Edge)
-                    //    {
-                    //        polygon.AddConstraint(EdgeConstraintType.CONSTRAINT_PARALLEL, (Edge)clickedElement, (Edge)clicked);
-                    //        InteractionMode = InteractionMode.EDIT;
-                    //    }
-                    //    else
-                    //    {
-                    //        clickedElement = null;
-                    //        clickedElementSecond = null;
-                    //        polygon.SetSelected(null);
-                    //        polygon.DrawPolygon(mainWind);
-                    //        InteractionMode = InteractionMode.EDIT;
-                    //    }
-                    //    break;
+                    case InteractionMode.CONSTRAINT_EQUAL:
+                        if (figSet.SelectedElement is Edge)
+                        {
+                            var prevClicked = figSet.SelectedElement;
+                            var prevClickedFigure = figSet.SelectedFigure;
+                            figSet.RefreshClickedOnFigureAndElement(loc);
+                            figSet.AddEqualConstraint((Edge)prevClicked, (Edge)figSet.SelectedElement, (Polygon)prevClickedFigure, (Polygon)figSet.SelectedFigure);
+                            InteractionMode = InteractionMode.EDIT;
+                        }
+                        else
+                        {
+                            figSet.RefreshClickedOnFigureAndElement(null);
+                            figSet.Draw(mainWind);
+                            InteractionMode = InteractionMode.EDIT;
+                        }
+                        break;
+                    case InteractionMode.CONSTRAINT_PARALLEL:
+                        if (figSet.SelectedElement is Edge)
+                        {
+                            var prevClicked = figSet.SelectedElement;
+                            var prevClickedFigure = figSet.SelectedFigure;
+                            figSet.RefreshClickedOnFigureAndElement(loc);
+                            figSet.AddParallelConstraint((Edge)prevClicked, (Edge)figSet.SelectedElement, (Polygon)prevClickedFigure, (Polygon)figSet.SelectedFigure);
+                            InteractionMode = InteractionMode.EDIT;
+                        }
+                        else
+                        {
+                            figSet.RefreshClickedOnFigureAndElement(null);
+                            figSet.Draw(mainWind);
+                            InteractionMode = InteractionMode.EDIT;
+                        }
+                        break;
                 }
 
             }
@@ -277,6 +305,14 @@ namespace ComputerGraphicsLab1
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Delete && figSet.SelectedElement is IConstraint)
+            {
+                var fig = figSet.SelectedFigure;
+                var c = (IConstraint)figSet.SelectedElement;
+                fig.DeleteElement(figSet.SelectedElement);
+                figSet.DeleteAllConstraints(c);
+                figSet.RefreshClickedOnFigureAndElement(null);
+            }
             if(e.KeyCode == Keys.Delete && figSet.SelectedFigure is Circle)
             {
                 figSet.RemoveFigure(figSet.SelectedFigure);
@@ -288,23 +324,19 @@ namespace ComputerGraphicsLab1
                 var fig = figSet.SelectedFigure;
                 if(fig is Polygon)
                 {
+                    figSet.DeleteAllConstraints((Vertex)figSet.SelectedElement);
                     fig.DeleteElement(figSet.SelectedElement);
-                } else if (fig is Circle)
-                {
-                    fig.DeleteElement(figSet.SelectedElement);
-                } else if (fig is MirroredPolygon)
-                {
-                    var mirr = (MirroredPolygon)figSet.SelectedFigure;
-                    mirr.DeleteVertices((Vertex)figSet.SelectedElement);
                 }
                 
                 figSet.RefreshClickedOnFigureAndElement(null);
                 deleteVertexButton.Enabled = false;
                 figSet.Draw(mainWind);
-            } else if (e.KeyCode == Keys.Delete && figSet.SelectedElement is EdgeConstraint)
+            } else if (e.KeyCode == Keys.Delete && figSet.SelectedElement is IConstraint)
             {
                 var fig = figSet.SelectedFigure;
+                var c = (IConstraint)figSet.SelectedElement;
                 fig.DeleteElement(figSet.SelectedElement);
+                figSet.DeleteConstraint(c);
                 figSet.RefreshClickedOnFigureAndElement(null);
             }
 
@@ -328,19 +360,16 @@ namespace ComputerGraphicsLab1
                     //polygon.GetSelected().Offset(offset);
                     if(fig is Polygon)
                     {
-                        var poly = (Polygon)fig;
-                        poly.OffsetElement(el, offset, new List<Edge>());
+                        figSet.OffsetElement(fig, el, offset, new List<IFigure>(), new List<Edge>(), new List<IConstraint>());
+                        //poly.OffsetElement(el, offset, new List<Edge>());
                     } else if(fig is Circle && el is Circle)
                     {
                         var circ = (Circle)fig;
-                        circ.ChangeSize(e.Location);
+                        figSet.OffsetElement(circ, el, e.Location, new List<IFigure>(), new List<Edge>(), new List<IConstraint>());
+                        //circ.ChangeSize(e.Location);
                     } else if (fig is Circle && el is Vertex)
                     {
                         fig.Offset(offset);
-                    } else if(fig is MirroredPolygon)
-                    {
-                        var mirr = (MirroredPolygon)fig;
-                        mirr.OffsetElements(el, offset);
                     }
 
                     curClick = e.Location;
@@ -380,102 +409,25 @@ namespace ComputerGraphicsLab1
 
         private void newPolygonButton_Click(object sender, EventArgs e)
         {
-            var colDial = new ColorDialog();
+            var fig = new Polygon(r, wid, Color.Black);
+            InteractionMode = InteractionMode.CREATE_NEW;
+            Cursor.Current = Cursors.Cross;
 
-            if (colDial.ShowDialog() == DialogResult.OK)
-            {
-                var fig = new Polygon(r, wid, colDial.Color);
-                InteractionMode = InteractionMode.CREATE_NEW;
-                Cursor.Current = Cursors.Cross;
-
-                selectedFigure = fig;
-                figSet.AddFigure(fig);
-                figSet.Draw(mainWind);
-            }
-
+            selectedFigure = fig;
+            figSet.AddFigure(fig);
+            figSet.Draw(mainWind);
         }
 
         private void newCircleButton_Click(object sender, EventArgs e)
         {
-            var colDial = new ColorDialog();
+            var fig = new Circle(1, new Vertex(new Point(-300, -300), r, wid), Color.Black);
+            InteractionMode = InteractionMode.CREATE_NEW;
+            Cursor.Current = Cursors.Cross;
 
-            if (colDial.ShowDialog() == DialogResult.OK)
-            {
-                var fig = new Circle(1, new Vertex(new Point(-300, -300), r, wid), colDial.Color);
-                InteractionMode = InteractionMode.CREATE_NEW;
-                Cursor.Current = Cursors.Cross;
-
-                selectedFigure = fig;
-                figSet.AddFigure(fig);
-                figSet.Draw(mainWind);
-            }
+            selectedFigure = fig;
+            figSet.AddFigure(fig);
+            figSet.Draw(mainWind);
         }
-
-        private void newMirroredPolygon_btn_Click(object sender, EventArgs e)
-        {
-            var colDial = new ColorDialog();
-
-            if (colDial.ShowDialog() == DialogResult.OK)
-            {
-                var fig = new MirroredPolygon(r, wid, colDial.Color, MirrorType.HORIZONTAL);
-                InteractionMode = InteractionMode.CREATE_NEW;
-                Cursor.Current = Cursors.Cross;
-
-                selectedFigure = fig;
-                figSet.AddFigure(fig);
-                figSet.Draw(mainWind);
-            }
-        }
-
-        private void newMirroredPolygonVer_btn_Click(object sender, EventArgs e)
-        {
-            var colDial = new ColorDialog();
-
-            if (colDial.ShowDialog() == DialogResult.OK)
-            {
-                var fig = new MirroredPolygon(r, wid, colDial.Color, MirrorType.VERTICAL);
-                InteractionMode = InteractionMode.CREATE_NEW;
-                Cursor.Current = Cursors.Cross;
-
-                selectedFigure = fig;
-                figSet.AddFigure(fig);
-                figSet.Draw(mainWind);
-            }
-        }
-
-        private void newMirroredPolygonHorVer_btn_Click(object sender, EventArgs e)
-        {
-            var colDial = new ColorDialog();
-
-            if (colDial.ShowDialog() == DialogResult.OK)
-            {
-                var fig = new MirroredPolygon(r, wid, colDial.Color, MirrorType.VERTICAL_HORIZONTAL);
-                InteractionMode = InteractionMode.CREATE_NEW;
-                Cursor.Current = Cursors.Cross;
-
-                selectedFigure = fig;
-                figSet.AddFigure(fig);
-                figSet.Draw(mainWind);
-            }
-        }
-
-        private void newMirroredPolygonPoint_btn_Click(object sender, EventArgs e)
-        {
-            var colDial = new ColorDialog();
-
-            if (colDial.ShowDialog() == DialogResult.OK)
-            {
-                var fig = new MirroredPolygon(r, wid, colDial.Color, MirrorType.POINT);
-                InteractionMode = InteractionMode.CREATE_NEW;
-                Cursor.Current = Cursors.Cross;
-
-                selectedFigure = fig;
-                figSet.AddFigure(fig);
-                figSet.Draw(mainWind);
-            }
-        }
-
-
 
         private void editPolygonButton_Click(object sender, EventArgs e)
         {
@@ -519,13 +471,9 @@ namespace ComputerGraphicsLab1
                 if (fig is Polygon)
                 {
                     poly = (Polygon)fig;
+                    figSet.DeleteAllConstraints(cl);
                     poly.SplitEdge(cl, cl.GetLocation());
                 }   
-                else if (fig is MirroredPolygon)
-                {
-                    var mirr = (MirroredPolygon)fig;
-                    mirr.SplitEdges(cl);
-                }
                 
             }
         }
@@ -541,11 +489,7 @@ namespace ComputerGraphicsLab1
                 } else if (figSet.SelectedFigure is Circle)
                 {
                     figSet.RemoveFigure(figSet.SelectedFigure);
-                } else if (figSet.SelectedFigure is MirroredPolygon)
-                {
-                    var mirr = (MirroredPolygon)figSet.SelectedFigure;
-                    mirr.DeleteVertices((Vertex)figSet.SelectedElement);
-                }
+                } 
 
                 deleteVertexButton.Enabled = false;
                 figSet.RefreshClickedOnFigureAndElement(null);
@@ -580,13 +524,60 @@ namespace ComputerGraphicsLab1
                 {
                     form2.ShowDialog();
                     if (form2.endValue != -1)
-                        cir.AddSetRadiusConstraint(form2.endValue);
+                        figSet.AddSetRadiusConstraint(cir, form2.endValue);
                 }
                 figSet.Draw(mainWind);
             }
             else
             {
                 MessageBox.Show("First select a circle, then click the constraint button!");
+            }
+        }
+
+        private void newConstraintLength_Click(object sender, EventArgs e)
+        {
+            if (figSet.SelectedElement is Edge)
+            {
+                var pol = (Polygon)(figSet.SelectedFigure);
+                var ed = (Edge)(figSet.SelectedElement);
+
+                using (RadiusForm form2 = new RadiusForm(ed.GetLength()))
+                {
+                    form2.ShowDialog();
+                    if (form2.endValue != -1)
+                        figSet.AddSetLengthConstraint(ed, form2.endValue, pol);
+                }
+                figSet.Draw(mainWind);
+            }
+            else
+            {
+                MessageBox.Show("First select a circle, then click the constraint button!");
+            }
+        }
+
+        private void newConstraintEqualEdges_Click(object sender, EventArgs e)
+        {
+            if (figSet.SelectedElement is Edge)
+            {
+                InteractionMode = InteractionMode.CONSTRAINT_EQUAL;
+                clickedElement = figSet.SelectedElement;
+            }
+            else
+            {
+                MessageBox.Show("First select an edge, then click the constraint button, then select the 2nd edge!");
+            }
+        }
+
+        private void newConstraintParallel_Click(object sender, EventArgs e)
+        {
+            if (figSet.SelectedElement is Edge)
+            {
+                InteractionMode = InteractionMode.CONSTRAINT_PARALLEL;
+                clickedElement = figSet.SelectedElement;
+            }
+            else
+            {
+                MessageBox.Show("First select an edge, then click the constraint button, then select the 2nd edge!");
             }
         }
     }

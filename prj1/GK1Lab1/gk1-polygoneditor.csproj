@@ -50,9 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\Circle.cs" />
-    <Compile Include="Constraint\EdgeConstraint.cs" />
     <Compile Include="Class\FigureSet.cs" />
-    <Compile Include="Class\MirroredPolygon.cs" />
     <Compile Include="Constraint\EqualConstraint.cs" />
     <Compile Include="Constraint\ParallelConstraint.cs" />
     <Compile Include="Constraint\SetLengthConstraint.cs" />

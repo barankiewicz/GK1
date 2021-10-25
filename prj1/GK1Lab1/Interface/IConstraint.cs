@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace ComputerGraphicsLab1.Interface
 {
-    public interface IConstraint
+    public interface IConstraint : IFigureElement
     {
         int Id { get; }
-        void ApplyConstraint();
+        void ApplyConstraint(Point p, IFigureElement e, bool rightmost);
 
-        void Draw(Graphics g, bool selected, Point? cursor = null);
+        void Draw(Graphics g, bool selected, IFigure f);
+
+        bool ContainsElement(IFigureElement e);
     }
 }

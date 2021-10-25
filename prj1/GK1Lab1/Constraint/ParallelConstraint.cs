@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ComputerGraphicsLab1.Constraint
 {
+    [Serializable]
     public class ParallelConstraint : IDoubleEdgeConstraint, IFigureElement
     {
 
@@ -18,36 +19,54 @@ namespace ComputerGraphicsLab1.Constraint
 
         public int Id { get; set; }
 
-        public void ApplyConstraint()
+        public ParallelConstraint(Edge e1, Edge e2, int id_)
         {
-            throw new NotImplementedException();
+            Edge1 = e1;
+            Edge2 = e2;
+            Id = id_;
         }
 
-        public void Draw(Graphics g, bool selected, Point? cursor = null)
+        public void ApplyConstraint(Point p, IFigureElement e, bool rightmost)
         {
-            Point loc1 = Edge1.GetLocation();
-            Point loc2 = Edge2.GetLocation();
+            if (!ContainsElement(e)) return;
+            var e2 = GetOtherElement(e);
+
+            if (e2.GetSlope(rightmost).alfa == ((Edge)e).GetSlope(rightmost).alfa)
+                return;
+
+            e2.SetSlope(((Edge)e).GetSlope(rightmost), rightmost);
+
+            return;
+        }
+
+        public void Draw(Graphics g, bool selected, IFigure f)
+        {
+            Edge e;
+
+            if (f.HasElement(Edge1))
+                e = Edge1;
+            else
+                e = Edge2;
+            Point loc1 = e.GetLocation();
+            //Point loc2 = e.GetLocation();
 
             g.FillRectangle(new SolidBrush(selected ? Color.Blue : Color.DarkGreen), new Rectangle(loc1, new Size(16, 16)));
-            g.FillRectangle(new SolidBrush(selected ? Color.Blue : Color.DarkGreen), new Rectangle(loc2, new Size(16, 16)));
+            //g.FillRectangle(new SolidBrush(selected ? Color.Blue : Color.DarkGreen), new Rectangle(loc2, new Size(16, 16)));
 
-                loc1.Offset(3, 2);
-                loc2.Offset(3, 2);
-                DrawParallelSign(g, loc1);
-                DrawParallelSign(g, loc2);
-                loc1.Offset(0, 4);
-                loc2.Offset(0, 4);
-
+            loc1.Offset(3, 6);
+            //loc2.Offset(3, 6);
+            DrawParallelSign(g, loc1);
+            //DrawEqualSign(g, loc2);
 
             loc1.Offset(9, 5);
-            loc2.Offset(9, 5);
+            //loc2.Offset(9, 5);
 
             StringFormat sf = new StringFormat();
             sf.LineAlignment = StringAlignment.Center;
             sf.Alignment = StringAlignment.Center;
             Font font = new Font("Arial", 9);
             g.DrawString(Id.ToString(), font, new SolidBrush(Color.White), loc1, sf);
-            g.DrawString(Id.ToString(), font, new SolidBrush(Color.White), loc2, sf);
+            //g.DrawString(Id.ToString(), font, new SolidBrush(Color.White), loc2, sf);
         }
 
         public Point GetLocation()
@@ -92,6 +111,17 @@ namespace ComputerGraphicsLab1.Constraint
             p.Offset(3, 0);
             g.FillRectangle(new SolidBrush(Color.White), new Rectangle(p, new Size(2, 8)));
             p.Offset(-3, -3);
+        }
+
+        public bool ContainsElement(IFigureElement e)
+        {
+            return e == Edge1 || e == Edge2;
+        }
+
+        public Edge GetOtherElement(IFigureElement e)
+        {
+            if (!ContainsElement(e)) return null;
+            return (e == Edge1) ? Edge2 : Edge1;
         }
     }
 }

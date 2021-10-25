@@ -10,6 +10,7 @@ using System.IO;
 using System.Drawing.Drawing2D;
 using ComputerGraphicsLab1.Class;
 using ComputerGraphicsLab1.Interface;
+using ComputerGraphicsLab1.Constraint;
 
 namespace ComputerGraphicsLab1
 {
@@ -32,12 +33,13 @@ namespace ComputerGraphicsLab1
         public Vertex LastVertex { get => vertices.LastOrDefault(); }
         public Vertex BeforeLastVertex { get => vertices.ElementAtOrDefault(vertices.Count - 2); }
         public Color FigureColor { get; set; }
-        public ICollection<IConstraint> Constraints { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ICollection<IConstraint> Constraints { get; set; }
 
         public Polygon(int _r, float _wid, Color col)
         {
             vertices = new List<Vertex>();
             edges = new List<Edge>();
+            Constraints = new HashSet<IConstraint>();
             r = _r;
             wid = _wid;
             selected = null;
@@ -46,6 +48,11 @@ namespace ComputerGraphicsLab1
 
         public IFigureElement ClickedOn(Point click)
         {
+            foreach (IConstraint c in Constraints)
+            {
+                if (c.IsClicked(click))
+                    return c;
+            }
 
             foreach (Vertex v in vertices)
             {
@@ -114,6 +121,9 @@ namespace ComputerGraphicsLab1
 
         public void DeleteEdge(Edge e)
         {
+            var c = FindConstraint(e);
+            if (c != null)
+                DeleteConstraint(c);
             edges.Remove(e);
         }
 
@@ -123,6 +133,14 @@ namespace ComputerGraphicsLab1
                 DeleteEdge((Edge)element);
             else if (element is Vertex)
                 DeleteVertex((Vertex)element);
+            else
+                DeleteConstraint((IConstraint)element);
+        }
+
+        private void DeleteConstraint(IConstraint element)
+        {
+            if(Constraints.Contains(element)) 
+                Constraints.Remove(element);
         }
 
         public void Draw(Graphics g, Point? cursor=null, bool customLines = false, bool isBeingCreated = false, bool antialiasing = false)
@@ -152,6 +170,16 @@ namespace ComputerGraphicsLab1
                     continue;
                 }
                 vertices[i].Draw(g, false, customLines);
+            }
+
+            for (int i = 0; i < Constraints.Count; i++)
+            {
+                if (selected != null && Constraints.ElementAt(i) == selected) //If selected, we want to draw it differently
+                {
+                    Constraints.ElementAt(i).Draw(g, true, this);
+                    continue;
+                }
+                Constraints.ElementAt(i).Draw(g, false, this);
             }
         }
 
@@ -204,7 +232,7 @@ namespace ComputerGraphicsLab1
             return null;
         }
 
-        public void OffsetElement(Interface.IFigureElement e, Point p, List<Edge> touchedEdges)
+        public void OffsetElement(IFigureElement e, Point p, List<Edge> touchedEdges, List<IConstraint> touchedConstraits)
         {
             if (touchedEdges.Count == edges.Count)
                 return;
@@ -220,7 +248,8 @@ namespace ComputerGraphicsLab1
                 initiallyMoved2 = GetNeighbourTo(v);
                 rightmost1 = initiallyMoved1.IsRightmost(v);
                 rightmost2 = initiallyMoved2.IsRightmost(v);
-            } else
+            }
+            else if (e is Edge)
             {
                 var ed = (Edge)e;
                 initiallyMoved1 = GetNeighbourTo(ed.from);
@@ -228,28 +257,41 @@ namespace ComputerGraphicsLab1
                 rightmost1 = initiallyMoved1.IsRightmost(ed.from);
                 rightmost2 = initiallyMoved2.IsRightmost(ed.to);
             }
+            else
+                return;
+
             if (touchedEdges.Count == 0)
                 e.Offset(p);
 
-            if(!touchedEdges.Contains(initiallyMoved1)) touchedEdges.Add(initiallyMoved1);
-            if(!touchedEdges.Contains(initiallyMoved2)) touchedEdges.Add(initiallyMoved2);
+            if (!touchedEdges.Contains(initiallyMoved1)) touchedEdges.Add(initiallyMoved1);
+            if (!touchedEdges.Contains(initiallyMoved2)) touchedEdges.Add(initiallyMoved2);
 
-            //EdgeConstraint constraint1 = FindConstraint(initiallyMoved1);
-            //EdgeConstraint constraint2 = FindConstraint(initiallyMoved2);
+            IConstraint constraint1 = FindConstraint(initiallyMoved1);
+            IConstraint constraint2 = FindConstraint(initiallyMoved2);
 
-            //if(constraint1 != null && !touchedConstraits.Contains(constraint1))
-            //{
-            //    touchedConstraits.Add(constraint1);
-            //    constraint1.Offset(p, initiallyMoved1, rightmost1);
-            //    OffsetElement(initiallyMoved1, p, touchedEdges, touchedConstraits);
-            //}
+            if (constraint1 != null && !touchedConstraits.Contains(constraint1))
+            {
+                touchedConstraits.Add(constraint1);
+                constraint1.ApplyConstraint(p, initiallyMoved1, rightmost1);
+                OffsetElement(initiallyMoved1, p, touchedEdges, touchedConstraits);
+            }
 
-            //if (constraint2 != null && !touchedConstraits.Contains(constraint2))
-            //{
-            //    touchedConstraits.Add(constraint2);
-            //    constraint2.Offset(p, initiallyMoved2, rightmost2);
-            //    OffsetElement(initiallyMoved2, p, touchedEdges, touchedConstraits);
-            //}
+            if (constraint2 != null && !touchedConstraits.Contains(constraint2))
+            {
+                touchedConstraits.Add(constraint2);
+                constraint2.ApplyConstraint(p, initiallyMoved2, rightmost2);
+                OffsetElement(initiallyMoved2, p, touchedEdges, touchedConstraits);
+            }
+        }
+
+        public IConstraint FindConstraint(IFigureElement e)
+        {
+            foreach (IConstraint c in Constraints)
+            {
+                if (c.ContainsElement(e))
+                    return c;
+            }
+            return null;
         }
 
 
@@ -267,6 +309,11 @@ namespace ComputerGraphicsLab1
             AddEdge(from, LastVertex);
             AddEdge(LastVertex, to);
             return newVertexLocation;
+        }
+
+        public bool HasElement(IFigureElement element)
+        {
+            return edges.Contains(element) || vertices.Contains(element);
         }
 
 
